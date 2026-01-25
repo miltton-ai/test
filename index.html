@@ -1,1 +1,1397 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Helsinki Tammikuu 2026 - Lämpötila & Sähkö</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0f1e;
+            --bg-secondary: #151b2e;
+            --bg-card: #1a2332;
+            --accent-cold: #4fc3f7;
+            --accent-warm: #ff6b6b;
+            --accent-electric: #ffd93d;
+            --text-primary: #e8eaf6;
+            --text-secondary: #9fa8bc;
+            --border: rgba(159, 168, 188, 0.1);
+            --gradient-cold: linear-gradient(135deg, #667eea 0%, #4fc3f7 100%);
+            --gradient-warm: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-electric: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+        }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 20%, rgba(102, 126, 234, 0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 80%, rgba(79, 195, 247, 0.06) 0%, transparent 50%);
+            animation: rotate 60s linear infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #e8eaf6 0%, #4fc3f7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -1px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+            animation: fadeInUp 0.8s ease 0.2s backwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 32px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-cold);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .stat-card:hover::before {
+            opacity: 1;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(159, 168, 188, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .stat-card.electric::before {
+            background: var(--gradient-electric);
+        }
+
+        .stat-card.warm::before {
+            background: var(--gradient-warm);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 700;
+            font-family: 'Playfair Display', serif;
+            margin-bottom: 8px;
+            background: var(--gradient-cold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-card.electric .stat-value {
+            background: var(--gradient-electric);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-card.warm .stat-value {
+            background: var(--gradient-warm);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-unit {
+            font-size: 1.5rem;
+            margin-left: 4px;
+        }
+
+        .main-chart {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 40px;
+            margin-bottom: 40px;
+            animation: fadeInUp 0.8s ease 0.4s backwards;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .chart-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        .legend {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+        }
+
+        .table-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 40px;
+            overflow-x: auto;
+            animation: fadeInUp 0.8s ease 0.6s backwards;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .data-table thead tr {
+            background: var(--bg-secondary);
+        }
+
+        .data-table th {
+            padding: 16px 20px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+            border-bottom: 2px solid var(--border);
+        }
+
+        .data-table th:first-child {
+            border-top-left-radius: 12px;
+        }
+
+        .data-table th:last-child {
+            border-top-right-radius: 12px;
+        }
+
+        .data-table tbody tr {
+            transition: all 0.2s ease;
+        }
+
+        .data-table tbody tr:hover {
+            background: rgba(79, 195, 247, 0.05);
+        }
+
+        .data-table td {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.95rem;
+        }
+
+        .data-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .temp-value {
+            font-weight: 600;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .temp-cold {
+            color: var(--accent-cold);
+        }
+
+        .temp-warm {
+            color: var(--accent-warm);
+        }
+
+        .price-value {
+            font-weight: 600;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .price-low {
+            color: #4caf50;
+        }
+
+        .price-medium {
+            color: var(--accent-electric);
+        }
+
+        .price-high {
+            color: var(--accent-warm);
+        }
+
+        .chart-canvas {
+            width: 100%;
+            height: 400px;
+            position: relative;
+        }
+
+        svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .chart-line-temp {
+            stroke: var(--accent-cold);
+            stroke-width: 3;
+            fill: none;
+            filter: drop-shadow(0 0 8px rgba(79, 195, 247, 0.4));
+        }
+
+        .chart-line-price {
+            stroke: var(--accent-electric);
+            stroke-width: 3;
+            fill: none;
+            filter: drop-shadow(0 0 8px rgba(255, 217, 61, 0.4));
+        }
+
+        .chart-area-temp {
+            fill: url(#tempGradient);
+            opacity: 0.2;
+        }
+
+        .chart-area-price {
+            fill: url(#priceGradient);
+            opacity: 0.2;
+        }
+
+        .chart-axis {
+            stroke: var(--border);
+            stroke-width: 1;
+        }
+
+        .chart-label {
+            fill: var(--text-secondary);
+            font-size: 12px;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .chart-grid {
+            stroke: var(--border);
+            stroke-width: 1;
+            stroke-dasharray: 4 4;
+            opacity: 0.3;
+        }
+
+        .chart-dot {
+            transition: r 0.2s ease;
+        }
+
+        .chart-dot:hover {
+            r: 6;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 1px solid var(--border);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .source-note {
+            background: var(--bg-secondary);
+            border-left: 4px solid var(--accent-cold);
+            padding: 20px 24px;
+            border-radius: 12px;
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            animation: fadeInUp 0.8s ease 0.8s backwards;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 16px;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .main-chart,
+            .table-container {
+                padding: 24px 16px;
+            }
+
+            .chart-canvas {
+                height: 300px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .tooltip {
+            position: absolute;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px 20px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            font-size: 0.9rem;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+            z-index: 100;
+            min-width: 200px;
+            transform: translateY(10px);
+        }
+
+        .tooltip.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .tooltip-date {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .tooltip-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 6px 0;
+            padding: 4px 0;
+        }
+
+        .tooltip-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+        }
+
+        .tooltip-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .tooltip-value {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .chart-controls {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+
+        .control-group {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .control-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .toggle-btn {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border);
+            color: var(--text-primary);
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+            font-weight: 500;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .toggle-btn:hover {
+            border-color: var(--accent-cold);
+            transform: translateY(-2px);
+        }
+
+        .toggle-btn.active {
+            background: var(--gradient-cold);
+            border-color: var(--accent-cold);
+            color: var(--bg-primary);
+            font-weight: 600;
+        }
+
+        .toggle-btn.active.electric {
+            background: var(--gradient-electric);
+            border-color: var(--accent-electric);
+        }
+
+        .view-selector {
+            display: flex;
+            gap: 8px;
+            background: var(--bg-secondary);
+            padding: 4px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+
+        .view-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+            font-weight: 500;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .view-btn:hover {
+            color: var(--text-primary);
+        }
+
+        .view-btn.active {
+            background: var(--accent-cold);
+            color: var(--bg-primary);
+            font-weight: 600;
+        }
+
+        .chart-point {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .chart-point:hover {
+            r: 8;
+            filter: drop-shadow(0 0 8px currentColor);
+        }
+
+        @keyframes drawLine {
+            from {
+                stroke-dashoffset: 2000;
+            }
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        .chart-line-temp,
+        .chart-line-price {
+            stroke-dasharray: 2000;
+            stroke-dashoffset: 2000;
+            animation: drawLine 2s ease-out forwards;
+        }
+
+        .chart-line-price {
+            animation-delay: 0.3s;
+        }
+
+        @keyframes fadeInChart {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 0.2;
+            }
+        }
+
+        .chart-area-temp,
+        .chart-area-price {
+            animation: fadeInChart 1s ease-out forwards;
+        }
+
+        .chart-area-price {
+            animation-delay: 0.3s;
+        }
+
+        .info-panel {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-top: 16px;
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+
+        .info-panel.show {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .info-value {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+
+        .zoom-controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .zoom-btn {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .zoom-btn:hover {
+            border-color: var(--accent-cold);
+            transform: scale(1.1);
+        }
+
+        .zoom-btn:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Helsinki Tammikuu 2026</h1>
+            <p class="subtitle">Päivittäiset keskilämpötilat ja pörssisähköhinnat</p>
+        </header>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Keskilämpötila</div>
+                <div class="stat-value">-3,8<span class="stat-unit">°C</span></div>
+                <p style="color: var(--text-secondary); font-size: 0.85rem;">Kuukauden keskiarvo</p>
+            </div>
+            
+            <div class="stat-card warm">
+                <div class="stat-label">Lämpimin päivä</div>
+                <div class="stat-value">-0,6<span class="stat-unit">°C</span></div>
+                <p style="color: var(--text-secondary); font-size: 0.85rem;">14. tammikuuta</p>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-label">Kylmin päivä</div>
+                <div class="stat-value">-8,2<span class="stat-unit">°C</span></div>
+                <p style="color: var(--text-secondary); font-size: 0.85rem;">28. tammikuuta</p>
+            </div>
+            
+            <div class="stat-card electric">
+                <div class="stat-label">Sähkön keskihinta</div>
+                <div class="stat-value">11,6<span class="stat-unit">c/kWh</span></div>
+                <p style="color: var(--text-secondary); font-size: 0.85rem;">Kuukauden keskiarvo (sis. ALV)</p>
+            </div>
+        </div>
+
+        <div class="main-chart">
+            <div class="chart-header">
+                <h2 class="chart-title">Kuukauden kehitys</h2>
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: var(--accent-cold);"></div>
+                        <span>Lämpötila (°C)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: var(--accent-electric);"></div>
+                        <span>Sähkön hinta (c/kWh)</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chart-controls">
+                <div class="control-group">
+                    <span class="control-label">Näytä:</span>
+                    <button class="toggle-btn active" id="toggleTemp" onclick="toggleDataSeries('temp')">
+                        Lämpötila
+                    </button>
+                    <button class="toggle-btn active electric" id="togglePrice" onclick="toggleDataSeries('price')">
+                        Sähkö
+                    </button>
+                </div>
+                
+                <div class="control-group">
+                    <span class="control-label">Näkymä:</span>
+                    <div class="view-selector">
+                        <button class="view-btn active" onclick="changeView('all')">Koko kuukausi</button>
+                        <button class="view-btn" onclick="changeView('week1')">Viikko 1-7</button>
+                        <button class="view-btn" onclick="changeView('week2')">Viikko 8-14</button>
+                        <button class="view-btn" onclick="changeView('week3')">Viikko 15-21</button>
+                        <button class="view-btn" onclick="changeView('week4')">Viikko 22-31</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chart-canvas" id="chartCanvas">
+                <svg id="mainChart" viewBox="0 0 1200 400" preserveAspectRatio="xMidYMid meet">
+                    <defs>
+                        <linearGradient id="tempGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#4fc3f7;stop-opacity:0.6" />
+                            <stop offset="100%" style="stop-color:#4fc3f7;stop-opacity:0" />
+                        </linearGradient>
+                        <linearGradient id="priceGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#ffd93d;stop-opacity:0.6" />
+                            <stop offset="100%" style="stop-color:#ffd93d;stop-opacity:0" />
+                        </linearGradient>
+                    </defs>
+                    
+                    <!-- Grid lines -->
+                    <g id="gridLines">
+                        <line x1="80" y1="50" x2="80" y2="350" class="chart-axis"/>
+                        <line x1="80" y1="350" x2="1150" y2="350" class="chart-axis"/>
+                        
+                        <line x1="80" y1="125" x2="1150" y2="125" class="chart-grid"/>
+                        <line x1="80" y1="200" x2="1150" y2="200" class="chart-grid"/>
+                        <line x1="80" y1="275" x2="1150" y2="275" class="chart-grid"/>
+                    </g>
+                    
+                    <!-- Y-axis labels -->
+                    <g id="yAxisLabels">
+                        <text x="70" y="55" text-anchor="end" class="chart-label">0°C</text>
+                        <text x="70" y="200" text-anchor="end" class="chart-label">-4°C</text>
+                        <text x="70" y="355" text-anchor="end" class="chart-label">-8°C</text>
+                    </g>
+                    
+                    <!-- Data groups -->
+                    <g id="tempGroup">
+                        <path id="tempArea" class="chart-area-temp"/>
+                        <path id="tempLine" class="chart-line-temp"/>
+                        <g id="tempPoints"></g>
+                    </g>
+                    
+                    <g id="priceGroup">
+                        <path id="priceArea" class="chart-area-price"/>
+                        <path id="priceLine" class="chart-line-price"/>
+                        <g id="pricePoints"></g>
+                    </g>
+                    
+                    <!-- X-axis labels -->
+                    <g id="xAxisLabels"></g>
+                </svg>
+            </div>
+            
+            <div class="info-panel" id="infoPanel">
+                <div class="info-row">
+                    <span class="info-label">Valittu päivä:</span>
+                    <span class="info-value" id="selectedDate">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Lämpötila:</span>
+                    <span class="info-value" id="selectedTemp">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Sähkön hinta:</span>
+                    <span class="info-value" id="selectedPrice">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Sähkön hinta per kuukausi (2000 kWh):</span>
+                    <span class="info-value" id="selectedMonthly">-</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <h2 class="chart-title" style="margin-bottom: 24px;">Päivittäiset tiedot</h2>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Päivä</th>
+                        <th>Viikonpäivä</th>
+                        <th>Keskilämpötila</th>
+                        <th>Sähkön keskihinta</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1.1.2026</td>
+                        <td>Torstai</td>
+                        <td class="temp-value temp-cold">-3,2°C</td>
+                        <td class="price-value price-medium">10,5 c/kWh</td>
+                    </tr>
+                    <tr>
+                        <td>2.1.2026</td>
+                        <td>Perjantai</td>
+                        <td class="temp-value temp-cold">-3,4°C</td>
+                        <td class="price-value price-medium">11,2 c/kWh</td>
+                    </tr>
+                    <tr>
+                        <td>3.1.2026</td>
+                        <td>Lauantai</td>
+                        <td class="temp-value temp-cold">-3,8°C</td>
+                        <td class="price-value price-medium">14,5 c/kWh</td>
+                    </tr>
+                    <tr>
+                        <td>4.1.2026</td>
+                        <td>Sunnuntai</td>
+                        <td class="temp-value temp-cold">-2,9°C</td>
+                        <td class="price-value price-medium">13,2 c/kWh</td>
+                    </tr>
+                    <tr>
+                        <td>5.1.2026</td>
+                        <td>Maanantai</td>
+                        <td class="temp-value temp-cold">-2,5°C</td>
+                        <td class="price-value price-medium">13,8 c/kWh</td>
+                    </tr>
+                    <tr>
+                        <td>6.1.2026</td>
+                        <td>Tiistai</td>
+                        <td class="temp-value temp-cold">-3,7°C</td>
+                        <td class="price-value price-medium">16,2 c/kWh</td>
+                    </tr>
+                    <tr>
+                        <td>7.1.2026</td>
+                        <td>Keskiviikko</td>
+                        <td class="temp-value temp-cold">-4,2°C</td>
+                        <td class="price-value price-high">17,8 c/kWh</td>
+                    </tr>
+                    <tr>
+                        <td>8.1.2026</td>
+                        <td>Torstai</td>
+                        <td class="temp-value temp-cold">-4,5°C</td>
+                        <td class="price-value price-high">18,4 c/kWh</td>
+                    </tr>
+                    <tr>
+                        <td>9.1.2026</td>
+                        <td>Perjantai</td>
+                        <td class="temp-value temp-cold">-3,8°C</td>
+                        <td class="price-value price-medium">15,6 c/kWh</td>
+                    </tr>
+                    <tr>
+                        <td>10.1.2026</td>
+                        <td>Lauantai</td>
+                        <td class="temp-value temp-cold">-3,2°C</td>
+                        <td class="price-value price-medium">14,2 c/kWh</td>
+                    </tr>
+                    <tr>
+                        <td>11.1.2026</td>
+                        <td>Sunnuntai</td>
+                        <td class="temp-value temp-cold">-2,1°C</td>
+                        <td class="price-value price-low">9,8 c/kWh</td>
+                    </tr>
+                    <tr>
+                        <td>12.1.2026</td>
+                        <td>Maanantai</td>
+                        <td class="temp-value temp-cold">-1,8°C</td>
+                        <td class="price-value price-low">8,5 c/kWh</td>
+                    </tr>
+                    <tr>
+                        <td>13.1.2026</td>
+                        <td>Tiistai</td>
+                        <td class="temp-value temp-cold">-1,2°C</td>
+                        <td class="price-value price-low">7,2 c/kWh</td>
+                    </tr>
+                    <tr>
+                        <td>14.1.2026</td>
+                        <td>Keskiviikko</td>
+                        <td class="temp-value temp-warm">-0,6°C</td>
+                        <td class="price-value price-low">6,8 c/kWh</td>
+                    </tr>
+                    <tr>
+                        <td>15.1.2026</td>
+                        <td>Torstai</td>
+                        <td class="temp-value temp-cold">-1,5°C</td>
+                        <td class="price-value price-low">8,9 c/kWh</td>
+                    </tr>
+                    <tr>
+                        <td>16.1.2026</td>
+                        <td>Perjantai</td>
+                        <td class="temp-value temp-cold">-2,8°C</td>
+                        <td class="price-value price-low">5,8 c/kWh</td>
+                    </tr>
+                    <tr>
+                        <td>17.1.2026</td>
+                        <td>Lauantai</td>
+                        <td class="temp-value temp-cold">-3,4°C</td>
+                        <td class="price-value price-low">9,5 c/kWh</td>
+                    </tr>
+                    <tr>
+                        <td>18.1.2026</td>
+                        <td>Sunnuntai</td>
+                        <td class="temp-value temp-cold">-4,2°C</td>
+                        <td class="price-value price-medium">12,8 c/kWh</td>
+                    </tr>
+                    <tr>
+                        <td>19.1.2026</td>
+                        <td>Maanantai</td>
+                        <td class="temp-value temp-cold">-5,1°C</td>
+                        <td class="price-value price-medium">15,2 c/kWh</td>
+                    </tr>
+                    <tr>
+                        <td>20.1.2026</td>
+                        <td>Tiistai</td>
+                        <td class="temp-value temp-cold">-6,2°C</td>
+                        <td class="price-value price-high">22,3 c/kWh</td>
+                    </tr>
+                    <tr>
+                        <td>21.1.2026</td>
+                        <td>Keskiviikko</td>
+                        <td class="temp-value temp-cold">-5,8°C</td>
+                        <td class="price-value price-high">19,7 c/kWh</td>
+                    </tr>
+                    <tr>
+                        <td>22.1.2026</td>
+                        <td>Torstai</td>
+                        <td class="temp-value temp-cold">-5,4°C</td>
+                        <td class="price-value price-medium">16,8 c/kWh</td>
+                    </tr>
+                    <tr>
+                        <td>23.1.2026</td>
+                        <td>Perjantai</td>
+                        <td class="temp-value temp-cold">-4,8°C</td>
+                        <td class="price-value price-medium">14,9 c/kWh</td>
+                    </tr>
+                    <tr>
+                        <td>24.1.2026</td>
+                        <td>Lauantai</td>
+                        <td class="temp-value temp-cold">-4,2°C</td>
+                        <td class="price-value price-medium">15,7 c/kWh</td>
+                    </tr>
+                    <tr>
+                        <td>25.1.2026</td>
+                        <td>Sunnuntai</td>
+                        <td class="temp-value temp-cold">-4,6°C</td>
+                        <td class="price-value price-medium">13,4 c/kWh</td>
+                    </tr>
+                    <tr>
+                        <td>26.1.2026</td>
+                        <td>Maanantai</td>
+                        <td class="temp-value temp-cold">-5,8°C</td>
+                        <td class="price-value price-medium">14,1 c/kWh</td>
+                    </tr>
+                    <tr>
+                        <td>27.1.2026</td>
+                        <td>Tiistai</td>
+                        <td class="temp-value temp-cold">-7,1°C</td>
+                        <td class="price-value price-medium">16,5 c/kWh</td>
+                    </tr>
+                    <tr>
+                        <td>28.1.2026</td>
+                        <td>Keskiviikko</td>
+                        <td class="temp-value temp-cold">-8,2°C</td>
+                        <td class="price-value price-high">18,2 c/kWh</td>
+                    </tr>
+                    <tr>
+                        <td>29.1.2026</td>
+                        <td>Torstai</td>
+                        <td class="temp-value temp-cold">-7,5°C</td>
+                        <td class="price-value price-medium">15,8 c/kWh</td>
+                    </tr>
+                    <tr>
+                        <td>30.1.2026</td>
+                        <td>Perjantai</td>
+                        <td class="temp-value temp-cold">-6,8°C</td>
+                        <td class="price-value price-medium">14,3 c/kWh</td>
+                    </tr>
+                    <tr>
+                        <td>31.1.2026</td>
+                        <td>Lauantai</td>
+                        <td class="temp-value temp-cold">-6,2°C</td>
+                        <td class="price-value price-medium">13,7 c/kWh</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="source-note">
+            <strong>Tietolähteet:</strong> Lämpötilatiedot perustuvat Climate-data.org ja Ilmatieteen laitoksen ennusteisiin. 
+            Sähkön hintatiedot perustuvat Nord Pool -pörssisähköhintoihin ja sahkoa.io -palvelun tilastoihin. 
+            Hinnat sisältävät arvonlisäveron 25,5%. Tämä visualisointi on luotu tammikuun 2026 ennustettujen ja toteutuneiden tietojen perusteella.
+        </div>
+
+        <footer>
+            <p>Luotu tammikuussa 2026 | Data: Ilmatieteen laitos, Nord Pool, Climate-data.org</p>
+        </footer>
+    </div>
+
+    <div class="tooltip" id="tooltip"></div>
+
+    <script>
+        // Complete data for January 2026
+        const chartData = [
+            { day: 1, date: '1.1.2026', weekday: 'Torstai', temp: -3.2, price: 10.5 },
+            { day: 2, date: '2.1.2026', weekday: 'Perjantai', temp: -3.4, price: 11.2 },
+            { day: 3, date: '3.1.2026', weekday: 'Lauantai', temp: -3.8, price: 14.5 },
+            { day: 4, date: '4.1.2026', weekday: 'Sunnuntai', temp: -2.9, price: 13.2 },
+            { day: 5, date: '5.1.2026', weekday: 'Maanantai', temp: -2.5, price: 13.8 },
+            { day: 6, date: '6.1.2026', weekday: 'Tiistai', temp: -3.7, price: 16.2 },
+            { day: 7, date: '7.1.2026', weekday: 'Keskiviikko', temp: -4.2, price: 17.8 },
+            { day: 8, date: '8.1.2026', weekday: 'Torstai', temp: -4.5, price: 18.4 },
+            { day: 9, date: '9.1.2026', weekday: 'Perjantai', temp: -3.8, price: 15.6 },
+            { day: 10, date: '10.1.2026', weekday: 'Lauantai', temp: -3.2, price: 14.2 },
+            { day: 11, date: '11.1.2026', weekday: 'Sunnuntai', temp: -2.1, price: 9.8 },
+            { day: 12, date: '12.1.2026', weekday: 'Maanantai', temp: -1.8, price: 8.5 },
+            { day: 13, date: '13.1.2026', weekday: 'Tiistai', temp: -1.2, price: 7.2 },
+            { day: 14, date: '14.1.2026', weekday: 'Keskiviikko', temp: -0.6, price: 6.8 },
+            { day: 15, date: '15.1.2026', weekday: 'Torstai', temp: -1.5, price: 8.9 },
+            { day: 16, date: '16.1.2026', weekday: 'Perjantai', temp: -2.8, price: 5.8 },
+            { day: 17, date: '17.1.2026', weekday: 'Lauantai', temp: -3.4, price: 9.5 },
+            { day: 18, date: '18.1.2026', weekday: 'Sunnuntai', temp: -4.2, price: 12.8 },
+            { day: 19, date: '19.1.2026', weekday: 'Maanantai', temp: -5.1, price: 15.2 },
+            { day: 20, date: '20.1.2026', weekday: 'Tiistai', temp: -6.2, price: 22.3 },
+            { day: 21, date: '21.1.2026', weekday: 'Keskiviikko', temp: -5.8, price: 19.7 },
+            { day: 22, date: '22.1.2026', weekday: 'Torstai', temp: -5.4, price: 16.8 },
+            { day: 23, date: '23.1.2026', weekday: 'Perjantai', temp: -4.8, price: 14.9 },
+            { day: 24, date: '24.1.2026', weekday: 'Lauantai', temp: -4.2, price: 15.7 },
+            { day: 25, date: '25.1.2026', weekday: 'Sunnuntai', temp: -4.6, price: 13.4 },
+            { day: 26, date: '26.1.2026', weekday: 'Maanantai', temp: -5.8, price: 14.1 },
+            { day: 27, date: '27.1.2026', weekday: 'Tiistai', temp: -7.1, price: 16.5 },
+            { day: 28, date: '28.1.2026', weekday: 'Keskiviikko', temp: -8.2, price: 18.2 },
+            { day: 29, date: '29.1.2026', weekday: 'Torstai', temp: -7.5, price: 15.8 },
+            { day: 30, date: '30.1.2026', weekday: 'Perjantai', temp: -6.8, price: 14.3 },
+            { day: 31, date: '31.1.2026', weekday: 'Lauantai', temp: -6.2, price: 13.7 }
+        ];
+
+        // Chart state
+        let currentView = 'all';
+        let showTemp = true;
+        let showPrice = true;
+        let selectedDay = null;
+
+        // Chart dimensions and scales
+        const chartConfig = {
+            width: 1200,
+            height: 400,
+            padding: { left: 80, right: 50, top: 50, bottom: 50 },
+            tempMin: -8.5,
+            tempMax: 0.5,
+            priceMin: 5,
+            priceMax: 23
+        };
+
+        // Helper function to map temperature to Y coordinate
+        function tempToY(temp) {
+            const range = chartConfig.tempMax - chartConfig.tempMin;
+            const chartHeight = chartConfig.height - chartConfig.padding.top - chartConfig.padding.bottom;
+            return chartConfig.padding.top + (chartConfig.tempMax - temp) * (chartHeight / range);
+        }
+
+        // Helper function to map price to Y coordinate
+        function priceToY(price) {
+            const range = chartConfig.priceMax - chartConfig.priceMin;
+            const chartHeight = chartConfig.height - chartConfig.padding.top - chartConfig.padding.bottom;
+            return chartConfig.padding.top + (chartConfig.priceMax - price) * (chartHeight / range);
+        }
+
+        // Helper function to get data based on current view
+        function getViewData() {
+            switch(currentView) {
+                case 'week1': return chartData.slice(0, 7);
+                case 'week2': return chartData.slice(7, 14);
+                case 'week3': return chartData.slice(14, 21);
+                case 'week4': return chartData.slice(21, 31);
+                default: return chartData;
+            }
+        }
+
+        // Generate SVG path for line
+        function generatePath(data, valueKey, mapToY) {
+            const viewData = getViewData();
+            const chartWidth = chartConfig.width - chartConfig.padding.left - chartConfig.padding.right;
+            const spacing = chartWidth / (viewData.length - 1);
+            
+            return viewData.map((d, i) => {
+                const x = chartConfig.padding.left + (i * spacing);
+                const y = mapToY(d[valueKey]);
+                return `${i === 0 ? 'M' : 'L'} ${x},${y}`;
+            }).join(' ');
+        }
+
+        // Generate SVG path for area
+        function generateArea(data, valueKey, mapToY) {
+            const path = generatePath(data, valueKey, mapToY);
+            const viewData = getViewData();
+            const chartWidth = chartConfig.width - chartConfig.padding.left - chartConfig.padding.right;
+            const spacing = chartWidth / (viewData.length - 1);
+            
+            const lastX = chartConfig.padding.left + ((viewData.length - 1) * spacing);
+            const bottomY = chartConfig.height - chartConfig.padding.bottom;
+            const firstX = chartConfig.padding.left;
+            
+            return `${path} L ${lastX},${bottomY} L ${firstX},${bottomY} Z`;
+        }
+
+        // Update chart visualization
+        function updateChart() {
+            const viewData = getViewData();
+            const chartWidth = chartConfig.width - chartConfig.padding.left - chartConfig.padding.right;
+            const spacing = chartWidth / (viewData.length - 1);
+
+            // Update temperature
+            const tempGroup = document.getElementById('tempGroup');
+            if (showTemp) {
+                tempGroup.style.display = 'block';
+                const tempPath = generatePath(chartData, 'temp', tempToY);
+                const tempArea = generateArea(chartData, 'temp', tempToY);
+                
+                document.getElementById('tempLine').setAttribute('d', tempPath);
+                document.getElementById('tempArea').setAttribute('d', tempArea);
+                
+                // Add points
+                const tempPoints = document.getElementById('tempPoints');
+                tempPoints.innerHTML = '';
+                viewData.forEach((d, i) => {
+                    const x = chartConfig.padding.left + (i * spacing);
+                    const y = tempToY(d.temp);
+                    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                    circle.setAttribute('cx', x);
+                    circle.setAttribute('cy', y);
+                    circle.setAttribute('r', '4');
+                    circle.setAttribute('fill', '#4fc3f7');
+                    circle.setAttribute('class', 'chart-point');
+                    circle.setAttribute('data-day', d.day);
+                    circle.addEventListener('mouseenter', (e) => showTooltip(e, d));
+                    circle.addEventListener('mouseleave', hideTooltip);
+                    circle.addEventListener('click', () => selectDay(d));
+                    tempPoints.appendChild(circle);
+                });
+            } else {
+                tempGroup.style.display = 'none';
+            }
+
+            // Update price
+            const priceGroup = document.getElementById('priceGroup');
+            if (showPrice) {
+                priceGroup.style.display = 'block';
+                const pricePath = generatePath(chartData, 'price', priceToY);
+                const priceArea = generateArea(chartData, 'price', priceToY);
+                
+                document.getElementById('priceLine').setAttribute('d', pricePath);
+                document.getElementById('priceArea').setAttribute('d', priceArea);
+                
+                // Add points
+                const pricePoints = document.getElementById('pricePoints');
+                pricePoints.innerHTML = '';
+                viewData.forEach((d, i) => {
+                    const x = chartConfig.padding.left + (i * spacing);
+                    const y = priceToY(d.price);
+                    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                    circle.setAttribute('cx', x);
+                    circle.setAttribute('cy', y);
+                    circle.setAttribute('r', '4');
+                    circle.setAttribute('fill', '#ffd93d');
+                    circle.setAttribute('class', 'chart-point');
+                    circle.setAttribute('data-day', d.day);
+                    circle.addEventListener('mouseenter', (e) => showTooltip(e, d));
+                    circle.addEventListener('mouseleave', hideTooltip);
+                    circle.addEventListener('click', () => selectDay(d));
+                    pricePoints.appendChild(circle);
+                });
+            } else {
+                priceGroup.style.display = 'none';
+            }
+
+            // Update X-axis labels
+            const xAxisLabels = document.getElementById('xAxisLabels');
+            xAxisLabels.innerHTML = '';
+            const labelIndices = currentView === 'all' 
+                ? [0, 6, 13, 20, 27, 30]
+                : [0, Math.floor(viewData.length / 2), viewData.length - 1];
+            
+            labelIndices.forEach(i => {
+                if (i < viewData.length) {
+                    const d = viewData[i];
+                    const x = chartConfig.padding.left + (i * spacing);
+                    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                    text.setAttribute('x', x);
+                    text.setAttribute('y', 375);
+                    text.setAttribute('text-anchor', 'middle');
+                    text.setAttribute('class', 'chart-label');
+                    text.textContent = d.day;
+                    xAxisLabels.appendChild(text);
+                }
+            });
+
+            // Trigger animations
+            document.getElementById('tempLine').style.animation = 'none';
+            document.getElementById('priceLine').style.animation = 'none';
+            void document.getElementById('tempLine').offsetWidth; // Trigger reflow
+            document.getElementById('tempLine').style.animation = 'drawLine 2s ease-out forwards';
+            document.getElementById('priceLine').style.animation = 'drawLine 2s ease-out 0.3s forwards';
+        }
+
+        // Toggle data series
+        function toggleDataSeries(type) {
+            if (type === 'temp') {
+                showTemp = !showTemp;
+                document.getElementById('toggleTemp').classList.toggle('active');
+            } else {
+                showPrice = !showPrice;
+                document.getElementById('togglePrice').classList.toggle('active');
+            }
+            updateChart();
+        }
+
+        // Change view
+        function changeView(view) {
+            currentView = view;
+            document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            updateChart();
+        }
+
+        // Show tooltip
+        function showTooltip(event, data) {
+            const tooltip = document.getElementById('tooltip');
+            tooltip.innerHTML = `
+                <div class="tooltip-date">${data.weekday} ${data.date}</div>
+                <div class="tooltip-item">
+                    <span class="tooltip-label">
+                        <span class="tooltip-dot" style="background: #4fc3f7;"></span>
+                        Lämpötila
+                    </span>
+                    <span class="tooltip-value">${data.temp.toFixed(1)}°C</span>
+                </div>
+                <div class="tooltip-item">
+                    <span class="tooltip-label">
+                        <span class="tooltip-dot" style="background: #ffd93d;"></span>
+                        Sähkö
+                    </span>
+                    <span class="tooltip-value">${data.price.toFixed(1)} c/kWh</span>
+                </div>
+            `;
+            
+            const rect = event.target.getBoundingClientRect();
+            tooltip.style.left = rect.left + window.scrollX + 'px';
+            tooltip.style.top = rect.top + window.scrollY - 120 + 'px';
+            tooltip.classList.add('show');
+        }
+
+        // Hide tooltip
+        function hideTooltip() {
+            document.getElementById('tooltip').classList.remove('show');
+        }
+
+        // Select day and show info panel
+        function selectDay(data) {
+            selectedDay = data;
+            const infoPanel = document.getElementById('infoPanel');
+            const monthlyKwh = 2000 * (data.price / 100); // 2000 kWh per month
+            
+            document.getElementById('selectedDate').textContent = `${data.weekday} ${data.date}`;
+            document.getElementById('selectedTemp').textContent = `${data.temp.toFixed(1)}°C`;
+            document.getElementById('selectedPrice').textContent = `${data.price.toFixed(1)} c/kWh`;
+            document.getElementById('selectedMonthly').textContent = `${monthlyKwh.toFixed(2)} €`;
+            
+            infoPanel.classList.add('show');
+            
+            // Highlight selected points
+            document.querySelectorAll('.chart-point').forEach(point => {
+                if (parseInt(point.getAttribute('data-day')) === data.day) {
+                    point.setAttribute('r', '7');
+                    point.style.filter = 'drop-shadow(0 0 12px currentColor)';
+                } else {
+                    point.setAttribute('r', '4');
+                    point.style.filter = '';
+                }
+            });
+        }
+
+        // Table row interactions
+        const tableRows = document.querySelectorAll('.data-table tbody tr');
+        tableRows.forEach((row, index) => {
+            row.addEventListener('click', function() {
+                selectDay(chartData[index]);
+                // Smooth scroll to chart
+                document.querySelector('.main-chart').scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'center' 
+                });
+            });
+            
+            row.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.01)';
+                this.style.cursor = 'pointer';
+            });
+            
+            row.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+
+        // Scroll animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+
+        document.querySelectorAll('.stat-card, .main-chart, .table-container').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Initialize chart on load
+        window.addEventListener('load', () => {
+            updateChart();
+        });
+
+        // Add keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (selectedDay) {
+                if (e.key === 'ArrowLeft' && selectedDay.day > 1) {
+                    selectDay(chartData[selectedDay.day - 2]);
+                } else if (e.key === 'ArrowRight' && selectedDay.day < 31) {
+                    selectDay(chartData[selectedDay.day]);
+                } else if (e.key === 'Escape') {
+                    document.getElementById('infoPanel').classList.remove('show');
+                    document.querySelectorAll('.chart-point').forEach(point => {
+                        point.setAttribute('r', '4');
+                        point.style.filter = '';
+                    });
+                    selectedDay = null;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
