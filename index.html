@@ -1,700 +1,582 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fi">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Nokia päätöskurssi vs. Oulu keskilämpötila — Joulukuu 2025</title>
-  <style>
-    :root{
-      --bg0:#070A0F;
-      --bg1:#0B1020;
-      --card:#0E1630cc;
-      --card2:#0C132A;
-      --stroke:#24305A;
-      --stroke2:#1B2446;
-      --text:#EAF0FF;
-      --muted:#A9B6E6;
-      --muted2:#7E8BC2;
-      --accent:#7AA2FF;
-      --accent2:#4EE6B5;
-      --warn:#FFCA6A;
-      --bad:#FF6B8B;
-      --shadow: 0 18px 50px rgba(0,0,0,.55);
-      --radius: 18px;
-      --radius2: 14px;
-      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family: var(--sans);
-      color: var(--text);
-      background:
-        radial-gradient(1200px 700px at 12% -10%, rgba(122,162,255,.25), transparent 60%),
-        radial-gradient(900px 600px at 85% 5%, rgba(78,230,181,.18), transparent 55%),
-        radial-gradient(900px 650px at 35% 110%, rgba(255,202,106,.12), transparent 55%),
-        linear-gradient(180deg, var(--bg0), var(--bg1));
-      overflow-x:hidden;
-    }
-    .wrap{
-      max-width: 1120px;
-      margin: 0 auto;
-      padding: 28px 18px 44px;
-    }
-    header{
-      display:flex;
-      gap:16px;
-      align-items:flex-start;
-      justify-content:space-between;
-      flex-wrap:wrap;
-      margin-bottom:18px;
-    }
-    .title{
-      display:flex;
-      flex-direction:column;
-      gap:6px;
-      min-width: 280px;
-    }
-    h1{
-      margin:0;
-      font-size: 20px;
-      letter-spacing: .2px;
-      font-weight: 740;
-      line-height:1.25;
-    }
-    .subtitle{
-      margin:0;
-      color: var(--muted);
-      font-size: 13px;
-      line-height:1.35;
-      max-width: 78ch;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minnesota ICE Protests - Uutisarkisto</title>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Work+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --deep-navy: #0d1117;
+            --slate: #161b22;
+            --charcoal: #21262d;
+            --crimson: #da3633;
+            --amber: #f0883e;
+            --ice: #58a6ff;
+            --frost: #e6edf3;
+            --mist: #7d8590;
+        }
 
-    .pillrow{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      flex-wrap:wrap;
-    }
-    .pill{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:10px 12px;
-      border:1px solid var(--stroke);
-      background: linear-gradient(180deg, rgba(16,24,50,.75), rgba(10,16,36,.55));
-      border-radius: 999px;
-      box-shadow: 0 10px 30px rgba(0,0,0,.25);
-      user-select:none;
-    }
-    .dot{
-      width:10px;height:10px;border-radius:50%;
-      background: var(--accent);
-      box-shadow: 0 0 0 4px rgba(122,162,255,.15);
-    }
-    .dot.temp{ background: var(--accent2); box-shadow: 0 0 0 4px rgba(78,230,181,.14); }
-    .pill b{ font-size: 12px; letter-spacing:.2px; }
-    .pill span{ font-size:12px; color: var(--muted); }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    .grid{
-      display:grid;
-      grid-template-columns: 1.25fr .75fr;
-      gap: 14px;
-      align-items:start;
-    }
+        body {
+            font-family: 'Work Sans', sans-serif;
+            background: var(--deep-navy);
+            color: var(--frost);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
 
-    .card{
-      background: linear-gradient(180deg, rgba(18,28,60,.72), rgba(10,16,38,.62));
-      border: 1px solid var(--stroke2);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-    }
-    .card .hd{
-      padding: 14px 16px 12px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      border-bottom:1px solid rgba(36,48,90,.7);
-      background: linear-gradient(180deg, rgba(255,255,255,.04), transparent);
-    }
-    .card .hd h2{
-      margin:0;
-      font-size: 14px;
-      font-weight: 720;
-      letter-spacing: .2px;
-      color: var(--text);
-      display:flex;
-      align-items:center;
-      gap:10px;
-    }
-    .chip{
-      font-family: var(--mono);
-      font-size: 12px;
-      color: var(--muted);
-      padding: 6px 10px;
-      border:1px solid rgba(36,48,90,.9);
-      border-radius: 999px;
-      background: rgba(12,19,42,.55);
-      white-space:nowrap;
-    }
+        /* Background texture */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                repeating-linear-gradient(
+                    45deg,
+                    transparent,
+                    transparent 10px,
+                    rgba(88, 166, 255, 0.02) 10px,
+                    rgba(88, 166, 255, 0.02) 20px
+                );
+            pointer-events: none;
+            z-index: 0;
+        }
 
-    .controls{
-      padding: 12px 16px 14px;
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:center;
-    }
-    .toggle{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      padding: 10px 12px;
-      border-radius: 12px;
-      border:1px solid rgba(36,48,90,.9);
-      background: rgba(12,19,42,.55);
-      cursor:pointer;
-      user-select:none;
-      transition: transform .08s ease, border-color .2s ease;
-    }
-    .toggle:active{ transform: scale(.99); }
-    .toggle input{ accent-color: var(--accent); }
-    .toggle .lbl{
-      font-size: 12px;
-      color: var(--muted);
-    }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
 
-    .cal{
-      padding: 0 16px 16px;
-    }
-    .dow{
-      display:grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 8px;
-      padding: 0 0 10px;
-      color: var(--muted2);
-      font-size: 11px;
-      letter-spacing: .25px;
-      text-transform: uppercase;
-    }
-    .days{
-      display:grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 8px;
-    }
-    .day{
-      position:relative;
-      padding: 10px 10px 9px;
-      border-radius: 14px;
-      border: 1px solid rgba(36,48,90,.75);
-      background: rgba(12,19,42,.45);
-      cursor:pointer;
-      min-height: 62px;
-      display:flex;
-      flex-direction:column;
-      justify-content:space-between;
-      transition: transform .08s ease, border-color .18s ease, background .18s ease;
-      outline: none;
-      -webkit-tap-highlight-color: transparent;
-      touch-action: manipulation;
-    }
-    .day:hover{ border-color: rgba(122,162,255,.55); }
-    .day:active{ transform: scale(.99); }
-    .day[aria-selected="true"]{
-      border-color: rgba(122,162,255,.95);
-      background: linear-gradient(180deg, rgba(122,162,255,.18), rgba(12,19,42,.50));
-      box-shadow: 0 12px 28px rgba(0,0,0,.35);
-    }
-    .day.muted{
-      opacity: .45;
-      cursor: default;
-    }
-    .dnum{
-      font-size: 12px;
-      color: var(--muted);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:8px;
-    }
-    .badges{
-      display:flex;
-      gap:6px;
-      align-items:center;
-      justify-content:flex-end;
-    }
-    .b{
-      width:8px;height:8px;border-radius:50%;
-      background: rgba(255,255,255,.18);
-    }
-    .b.price{ background: var(--accent); box-shadow: 0 0 0 4px rgba(122,162,255,.12); }
-    .b.temp{ background: var(--accent2); box-shadow: 0 0 0 4px rgba(78,230,181,.10); }
-    .preview{
-      margin-top: 7px;
-      font-family: var(--mono);
-      font-size: 12px;
-      color: var(--text);
-      opacity:.95;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      white-space:nowrap;
-    }
-    .preview .small{
-      color: var(--muted2);
-      font-size: 11px;
-      font-family: var(--sans);
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
+        header {
+            text-align: center;
+            padding: 3rem 0;
+            margin-bottom: 3rem;
+            border-bottom: 2px solid var(--charcoal);
+            animation: fadeIn 1s ease-out;
+        }
 
-    .detail{
-      padding: 14px 16px 16px;
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
-    .kpi{
-      display:grid;
-      gap:10px;
-    }
-    .k{
-      padding: 12px 12px;
-      border-radius: var(--radius2);
-      border: 1px solid rgba(36,48,90,.75);
-      background: rgba(12,19,42,.50);
-    }
-    .k .top{
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
-      margin-bottom: 6px;
-    }
-    .k .name{
-      display:flex; align-items:center; gap:10px;
-      font-size: 12px; color: var(--muted);
-      letter-spacing:.2px;
-    }
-    .k .val{
-      font-family: var(--mono);
-      font-size: 18px;
-      font-weight: 780;
-      letter-spacing: .2px;
-    }
-    .k .sub{
-      font-size: 12px;
-      color: var(--muted2);
-      line-height:1.35;
-    }
-    .footnote{
-      margin-top: 4px;
-      font-size: 11px;
-      color: rgba(169,182,230,.85);
-      line-height:1.45;
-    }
-    .hint{
-      margin-top: 8px;
-      font-size: 11px;
-      color: rgba(169,182,230,.75);
-      line-height:1.45;
-    }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-    @media (max-width: 920px){
-      .grid{ grid-template-columns: 1fr; }
-    }
-    @media (max-width: 520px){
-      .day{ min-height: 58px; padding: 10px 9px 9px; }
-      .preview{ font-size: 11px; }
-      .k .val{ font-size: 17px; }
-    }
-  </style>
+        h1 {
+            font-family: 'Crimson Text', serif;
+            font-size: clamp(2rem, 6vw, 4rem);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            line-height: 1.1;
+            background: linear-gradient(135deg, var(--crimson) 0%, var(--amber) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--ice);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            margin-bottom: 1rem;
+        }
+
+        .description {
+            font-size: 1rem;
+            color: var(--mist);
+            max-width: 700px;
+            margin: 1rem auto 0;
+            line-height: 1.8;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-bottom: 3rem;
+            padding: 1.5rem;
+            background: var(--slate);
+            border: 1px solid var(--charcoal);
+            border-radius: 8px;
+            animation: slideUp 0.8s ease-out 0.2s both;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--ice);
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--mist);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .articles-container {
+            display: grid;
+            gap: 1rem;
+            animation: fadeIn 1s ease-out 0.4s both;
+        }
+
+        .article-card {
+            background: var(--slate);
+            border: 1px solid var(--charcoal);
+            border-left: 4px solid var(--charcoal);
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .article-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--crimson) 0%, var(--amber) 100%);
+            transform: scaleY(0);
+            transform-origin: bottom;
+            transition: transform 0.3s ease;
+        }
+
+        .article-card:hover {
+            background: var(--charcoal);
+            border-left-color: transparent;
+            transform: translateX(8px);
+            box-shadow: -4px 0 20px rgba(218, 54, 51, 0.15);
+        }
+
+        .article-card:hover::before {
+            transform: scaleY(1);
+            transform-origin: top;
+        }
+
+        .article-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .article-meta {
+            flex: 1;
+        }
+
+        .article-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--amber);
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .article-date {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--mist);
+        }
+
+        .article-source {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            padding: 0.3rem 0.8rem;
+            background: rgba(88, 166, 255, 0.15);
+            color: var(--ice);
+            border-radius: 20px;
+            white-space: nowrap;
+        }
+
+        .article-title {
+            font-family: 'Crimson Text', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            line-height: 1.4;
+            margin-bottom: 0.8rem;
+            color: var(--frost);
+        }
+
+        .article-title a {
+            color: inherit;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .article-title a:hover {
+            color: var(--ice);
+        }
+
+        .article-excerpt {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--mist);
+            margin-bottom: 1rem;
+        }
+
+        .article-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--ice);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .article-link:hover {
+            color: var(--frost);
+            gap: 0.8rem;
+        }
+
+        .article-link::after {
+            content: '→';
+            font-size: 1.2rem;
+        }
+
+        .alert-banner {
+            background: linear-gradient(135deg, rgba(218, 54, 51, 0.2) 0%, rgba(240, 136, 62, 0.2) 100%);
+            border: 1px solid var(--crimson);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .alert-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--crimson);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
+
+        .alert-text {
+            color: var(--frost);
+            font-size: 0.95rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem 0 2rem;
+            margin-top: 4rem;
+            border-top: 1px solid var(--charcoal);
+            color: var(--mist);
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            header {
+                padding: 2rem 0;
+                margin-bottom: 2rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .stats-bar {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            .article-header {
+                flex-direction: column;
+            }
+
+            .article-source {
+                align-self: flex-start;
+            }
+
+            .article-title {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <div class="title">
-        <h1>Nokia (päätöskurssi) × Oulu (keskilämpötila) — Joulukuu 2025</h1>
-        <p class="subtitle">
-          Klikkaa päivää (desktop tai mobiili) → oikealla näkyy valitun päivän luvut rinnakkain.
-          Data on sisällytetty tähän tiedostoon staattisesti (ei aktiivisia rajapintakutsuja).
-        </p>
-      </div>
-      <div class="pillrow" aria-label="Legend">
-        <div class="pill" title="Nokia päätöskurssi (EUR)">
-          <span class="dot" aria-hidden="true"></span>
-          <b>NOKIA</b><span>päätöskurssi (EUR)</span>
-        </div>
-        <div class="pill" title="Oulu keskilämpötila (°C)">
-          <span class="dot temp" aria-hidden="true"></span>
-          <b>Oulu</b><span>keskilämpötila (°C)</span>
-        </div>
-      </div>
-    </header>
+    <div class="container">
+        <header>
+            <div class="subtitle">Uutisarkisto</div>
+            <h1>Minnesota ICE<br>Protests & Riots</h1>
+            <p class="description">
+                Kattava kokoelma uutisartikkeleita Operation Metro Surge -operaatiosta, 
+                mielenosoituksista ja niiden seurauksista Minnesotan osavaltiossa tammikuussa 2026.
+            </p>
+        </header>
 
-    <section class="grid">
-      <!-- Calendar -->
-      <div class="card" id="calendarCard">
-        <div class="hd">
-          <h2>
-            <span style="width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.25);display:inline-block"></span>
-            Päivät (joulukuu 2025)
-          </h2>
-          <span class="chip" id="rangeChip">2025-12-01 → 2025-12-31</span>
-        </div>
-
-        <div class="controls">
-          <label class="toggle" title="Näytä vain päivät, joilta löytyy Nokian päätöskurssi (pörssipäivät)">
-            <input type="checkbox" id="onlyTrading" />
-            <span class="lbl">Vain pörssipäivät</span>
-          </label>
-
-          <label class="toggle" title="Valitse automaattisesti lähin pörssipäivä, jos klikkaat päivää jolta ei ole kurssidataa">
-            <input type="checkbox" id="snapToTrading" checked />
-            <span class="lbl">Snap pörssipäivään</span>
-          </label>
-
-          <div class="chip" id="selectedChip" aria-live="polite">Valittu: —</div>
-        </div>
-
-        <div class="cal">
-          <div class="dow" aria-hidden="true">
-            <div>Ma</div><div>Ti</div><div>Ke</div><div>To</div><div>Pe</div><div>La</div><div>Su</div>
-          </div>
-          <div class="days" id="daysGrid" role="listbox" aria-label="Päivävalitsin"></div>
-          <div class="hint">
-            Vinkki: nuolinäppäimet toimii (↑ ↓ ← →), Enter valitsee.
-          </div>
-        </div>
-      </div>
-
-      <!-- Details -->
-      <aside class="card" id="detailCard">
-        <div class="hd">
-          <h2>
-            <span style="width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.25);display:inline-block"></span>
-            Päivän näkymä
-          </h2>
-          <span class="chip" id="metaChip">Joulukuu 2025</span>
-        </div>
-
-        <div class="detail">
-          <div class="kpi">
-            <div class="k">
-              <div class="top">
-                <div class="name"><span class="dot" aria-hidden="true"></span> Nokia päätöskurssi</div>
-                <div class="val" id="priceVal">—</div>
-              </div>
-              <div class="sub" id="priceSub">Valitse päivä kalenterista.</div>
+        <div class="alert-banner">
+            <div class="alert-title">⚠ Breaking News</div>
+            <div class="alert-text">
+                Kaksi Yhdysvaltain kansalaista ammuttu kuoliaaksi liittovaltion viranomaisten toimesta Minneapolisissa kolmen viikon aikana
             </div>
-
-            <div class="k">
-              <div class="top">
-                <div class="name"><span class="dot temp" aria-hidden="true"></span> Oulu keskilämpötila (kuukausi)</div>
-                <div class="val" id="tempVal">—</div>
-              </div>
-              <div class="sub" id="tempSub">Joulukuun 2025 keskilämpötila Oulussa.</div>
-            </div>
-          </div>
-
-          <div class="footnote">
-            <b>Huom:</b> Pörssidataa on vain kaupankäyntipäiviltä. Lämpötila on tässä demossa joulukuun 2025
-            <i>kuukausikeskiarvo</i>, jotta näkymä toimii jokaiselle kalenteripäivälle.
-          </div>
-
-          <!-- SOURCES (human-readable, not used at runtime):
-            - Nokia daily closes (EUR): Wiener Börse "Nokia Oyj (FI0009000681) historical data" PDFs covering Dec 2025.
-              (We embedded trading-day closes for 2025-12-01..2025-12-30)
-              Example PDFs seen in browsing: date-start=11/27/2025&date-end=12/27/2025 and date-start=12/09/2025&date-end=01/09/2026.
-            - Oulu monthly mean temperature (Dec 2025): "Säähavaintoarkisto - Kuukausitilastot - FMI Avoin data" (kilotavu.com),
-              row "Oulu Kaukovainio -2.6" (interpreted as Dec 2025 monthly mean °C).
-          -->
         </div>
-      </aside>
-    </section>
-  </div>
 
-  <script>
-    /***********************
-     * 1) DATA (STATIC)
-     ***********************/
-    // Nokia closes in December 2025 (EUR), trading days only.
-    // Keys are ISO date strings in Helsinki local calendar (YYYY-MM-DD).
-    const NOKIA_CLOSE_EUR = {
-      "2025-12-01": 4.1910,
-      "2025-12-02": 4.2960,
-      "2025-12-03": 4.2500,
-      "2025-12-04": 4.1400,
-      "2025-12-05": 4.0830,
-      "2025-12-08": 4.1660,
-      "2025-12-09": 4.2170,
-      "2025-12-10": 4.1500,
-      "2025-12-11": 4.1650,
-      "2025-12-12": 4.0970,
-      "2025-12-15": 4.0830,
-      "2025-12-16": 4.0520,
-      "2025-12-17": 4.0410,
-      "2025-12-18": 4.0330,
-      "2025-12-19": 4.0080,
-      "2025-12-22": 4.0200,
-      "2025-12-23": 3.9540,
-      "2025-12-29": 3.9680,
-      "2025-12-30": 3.9450
-      // 12/24–12/28: holidays/weekend; 12/31: not present in the source set used here
-    };
+        <div class="stats-bar">
+            <div class="stat">
+                <span class="stat-number">25</span>
+                <span class="stat-label">Artikkelia</span>
+            </div>
+            <div class="stat">
+                <span class="stat-number">3000+</span>
+                <span class="stat-label">Liittovaltion agenttia</span>
+            </div>
+            <div class="stat">
+                <span class="stat-number">50k+</span>
+                <span class="stat-label">Mielenosoittajaa</span>
+            </div>
+        </div>
 
-    // Oulu average temperature for the month December 2025 (°C).
-    // Used as a constant for each day in December to keep the per-day UI consistent.
-    const OULU_DEC_2025_MEAN_C = -2.6;
+        <div class="articles-container" id="articlesContainer"></div>
 
-    // Month we show
-    const MONTH = 12; // December
-    const YEAR = 2025;
+        <footer>
+            <p>Uutiset koottu useista lähteistä • Päivitetty 25.1.2026</p>
+        </footer>
+    </div>
 
-    /***********************
-     * 2) UTILITIES
-     ***********************/
-    const pad2 = (n) => String(n).padStart(2, "0");
-    const iso = (y, m, d) => `${y}-${pad2(m)}-${pad2(d)}`;
+    <script>
+        const articles = [
+            {
+                title: "Judge grants restraining order against DHS after Border Patrol kills Alex Pretti in Minneapolis",
+                source: "CBS Minnesota",
+                date: "25.1.2026",
+                excerpt: "Liittovaltion tuomari myönsi väliaikaisen lähestymiskiellon Yhdysvaltain sisäisen turvallisuuden ministeriötä vastaan kieltäen todisteiden muuttamisen tai tuhoamisen Alex Prettin kuolemaan liittyen. 37-vuotias teho-osaston sairaanhoitaja ammuttiin kuoliaaksi Minneapolisissa.",
+                url: "https://www.cbsnews.com/minnesota/live-updates/reported-shooting-south-minneapolis-federal-agents-protesters/"
+            },
+            {
+                title: "Minneapolis shooting live updates: Witness describes shooting in federal court filing",
+                source: "ABC News",
+                date: "25.1.2026",
+                excerpt: "Barack ja Michelle Obama julkaisivat lausunnon, jossa he kutsuvat Alex Prettin kuolema 'herätyskeluks' ja kritisoivat liittovaltion viranomaisten toimintaa Minnesotassa. Silminnäkijät ja viranomaiset antavat ristiriitaisia kertomuksia tapahtumista.",
+                url: "https://abcnews.go.com/US/live-updates/minneapolis-ice-shooting-live-updates-doj-investigating-apparent/?id=129340693"
+            },
+            {
+                title: "Minnesota ICE official Sam Olson urges peaceful protests amid unrest",
+                source: "Fox News",
+                date: "25.1.2026",
+                excerpt: "Minnesotan ICE-virkamies Sam Olson kehottaa Twin Citiesin mielenosoittajia pitämään mielenosoitukset rauhanomaisina viimeaikaisten kuolemaan johtaneiden liittovaltion agentien osallistumien ampumisten jälkeen.",
+                url: "https://www.foxnews.com/media/minnesota-ice-official-urges-protests-remain-peaceful-amid-tensions-like-nothing-ive-ever-seen-before"
+            },
+            {
+                title: "Former President Obama and first lady condemn 'lawless' federal operations in Minnesota",
+                source: "ABC News",
+                date: "25.1.2026",
+                excerpt: "Obaman pariskunta kuvailee liittovaltion agentien taktiikkaa 'noloksi, lainvastaiseksi ja julmaksi' ja syyttää Trumpin hallintoa jännitteiden eskaloinnista Minneapolisissa tarjoamalla harhaanjohtavia selityksiä ampumisille.",
+                url: "https://abcnews.go.com/US/live-updates/minneapolis-ice-shooting-live-updates-doj-investigating-apparent/?id=129340693"
+            },
+            {
+                title: "Minnesota business CEOs demand 'immediate de-escalation' after fatal shooting",
+                source: "ABC News",
+                date: "24.1.2026",
+                excerpt: "Minnesotan suurimpien yritysten toimitusjohtajat, mukaan lukien UnitedHealth Group, 3M, Target, Best Buy ja General Mills, vaativat välitöntä jännitteiden laukaisemista avoimessa kirjeessä. Myös Vikings, Timberwolves ja Wild allekirjoittivat lausunnon.",
+                url: "https://abcnews.go.com/US/live-updates/minneapolis-ice-shooting-live-updates-doj-investigating-apparent/?id=129340693"
+            },
+            {
+                title: "Thousands rally in New York's Union Square against ICE raids, support Minnesota protests",
+                source: "Meaww",
+                date: "23.1.2026",
+                excerpt: "Tuhannet ihmiset marssivat Union Squarella New Yorkissa kehottaen lainsäätäjiä katkaisemaan suhteet ICE:hen ja tukemaan Minneapolisin osavaltion laajuista lakkoa ICE-operaatioita vastaan.",
+                url: "https://news.meaww.com/thousands-rally-in-new-yorks-union-square-against-ice-raids-support-minnesota-protests"
+            },
+            {
+                title: "Hundreds rally in Boston in solidarity with Minnesota ICE protests",
+                source: "GBH",
+                date: "23.1.2026",
+                excerpt: "Bostonin mielenosoitus järjestettiin samanaikaisesti Twin Citiesin suurten protestien kanssa, osoittaen kansallista solidaarisuutta Minnesotan tapahtumille.",
+                url: "https://www.wgbh.org/news/local/2026-01-23/hundreds-rally-in-boston-in-solidarity-with-minnesota-ice-protests"
+            },
+            {
+                title: "Federal agents' aggressive moves in Minneapolis visualized",
+                source: "CNN",
+                date: "23.1.2026",
+                excerpt: "CNN:n interaktiivinen visualisointi liittovaltion agentien läsnäolosta ja operaatioista Minneapolis-St. Paul -alueella, dokumentoiden Operation Metro Surgen laajuuden ja vaikutuksen.",
+                url: "https://www.cnn.com/interactive/2026/01/us/ice-presence-minneapolis-st-paul-vis/"
+            },
+            {
+                title: "Minnesota judges continue to reject arrest warrants in ICE protests",
+                source: "MS Now",
+                date: "23.1.2026",
+                excerpt: "Lähteiden mukaan liittovaltion agentit eivät toimita todisteita siitä, että mielenosoittajat syyllistyisivät rikoksiin, joista heitä syytetään. Minnesotalainen oikeuslaitos vastustaa liittovaltion pyyntöjä.",
+                url: "https://www.ms.now/news/minnesota-judges-continue-to-reject-arrest-warrants-in-ice-protests"
+            },
+            {
+                title: "Anti-ICE agitator William Kelly arrested after Minnesota church riot video",
+                source: "Fox News",
+                date: "23.1.2026",
+                excerpt: "ICE-vastainen aktivisti William Kelly pidätettiin osallistuttuaan Cities Churchin häiriköintiin Minnesotassa. Pidätys tapahtui päivien päästä Attorney General Bondin kehottamasta toimenpiteestä.",
+                url: "https://www.foxnews.com/politics/anti-ice-minnesota-agitator-arrested-days-after-daring-bondi-do-so"
+            },
+            {
+                title: "Minnesota protests Trump administration's immigration crackdown",
+                source: "NPR",
+                date: "23.1.2026",
+                excerpt: "Tuhannet ihmiset kokoontuivat Minneapolisin keskustaan pakkasen keskellä osana marssia ja mielenosoitusta liittohallituksen maahanmuuttooperaatiota vastaan useiden viikkojen kestäneen vastarinnan jälkeen.",
+                url: "https://www.npr.org/2026/01/23/nx-s1-5686733/minnesotans-day-of-ice-protests"
+            },
+            {
+                title: "Thousands in Minneapolis brave bitter cold to protest ICE crackdown",
+                source: "Al Jazeera",
+                date: "24.1.2026",
+                excerpt: "Mielenosoittajat marssivat jäisissä olosuhteissa Trumpin hallinnon maahanmuuttovastaisia toimia vastaan, vaatien ICE:n poistumista kaupungista. Lämpötilat laskivat jopa -29 celsiusasteeseen, mutta järjestäjien mukaan jopa 50 000 ihmistä osallistui.",
+                url: "https://www.aljazeera.com/news/2026/1/24/thousands-in-minneapolis-brave-bitter-cold-to-protest-ice-crackdown"
+            },
+            {
+                title: "Operation Metro Surge - Comprehensive Wikipedia overview",
+                source: "Wikipedia",
+                date: "Päivitetty 25.1.2026",
+                excerpt: "Kattava katsaus Operation Metro Surge -operaatioon, mukaan lukien aikajana, ampumistapahtumien yksityiskohdat, oikeudelliset toimet ja kansalliset reaktiot. Dokumentoi kahden Yhdysvaltain kansalaisen kuolemat ja laajamittaiset mielenosoitukset.",
+                url: "https://en.wikipedia.org/wiki/Operation_Metro_Surge"
+            },
+            {
+                title: "Thousands rally against ICE in Minneapolis in below-zero temperatures",
+                source: "NBC News",
+                date: "23.1.2026",
+                excerpt: "Tuhannet ihmiset marssivat pakkasen keskellä liittohallituksen maahanmuuttoiskun aikaan Minneapolisissa. Järjestäjät jakoivat käden lämmittimiä mielenosoittajille, jotka heiluttivat Yhdysvaltain lippuja ja pitivät kylttejä vaatien ICE:n poistumista kaupungista.",
+                url: "https://www.nbcnews.com/news/us-news/ice-out-rally-minneapolis-immigration-protest-rcna255631"
+            },
+            {
+                title: "ICE Out rally and arrests at MSP Airport",
+                source: "FOX 9 Minneapolis",
+                date: "23.1.2026",
+                excerpt: "Papiston jäsenet pidätettiin Minneapolis-St. Paul -lentokentällä rauhanomaisen protestin aikana. Noin 100 henkilöä sai rikkomuksista syytteet kotirauhan rikkomisesta ja poliisin käskyjen noudattamatta jättämisestä.",
+                url: "https://www.fox9.com/news/ice-minnesota-updates-jan-23-2026"
+            },
+            {
+                title: "Statewide economic blackout planned in Minnesota to protest ICE enforcement",
+                source: "NPR",
+                date: "23.1.2026",
+                excerpt: "Monet yritykset Minnesotassa sulkivat ovensa perjantaina, kun mielenosoittajat järjestivät protesteja ja osavaltion laajuisen taloudellisen pimennyksen vastustaakseen jatkuvaa ICE-valvontaa osavaltiossa.",
+                url: "https://www.npr.org/2026/01/23/nx-s1-5685388/statewide-economic-blackout-planned-in-minnesota-to-protest-ice-enforcement"
+            },
+            {
+                title: "Thousands brave frigid cold in Twin Cities 'ICE Out' protest",
+                source: "PBS News",
+                date: "23.1.2026",
+                excerpt: "PBS:n raportti 'ICE Out' -mielenosoituksesta, jossa tuhannet ihmiset uhmaisivat jäätäviä lämpötiloja marssien noin mailin keskustan Minneapolisin läpi sisäkoripalloareenalle. DHS ei osoittanut merkkejä operaation lieventämisestä.",
+                url: "https://www.pbs.org/newshour/show/thousands-brave-frigid-cold-in-twin-cities-ice-out-protest"
+            },
+            {
+                title: "Minnesota hotels close amid ICE protests over safety concerns",
+                source: "Washington Examiner",
+                date: "18.1.2026",
+                excerpt: "Minneapolisin viranomaiset ovat varoittaneet, että kaupunki on menossa kohti kääntöpistettä, joka on samanlainen kuin vuoden 2020 Black Lives Matter -protestien aikana puhjenneisiin mellakoihin. Useita hotelleja suljettu turvallisuussyistä.",
+                url: "https://www.washingtonexaminer.com/news/crime/4424458/minnesota-hotels-shut-down-ice-protests/"
+            },
+            {
+                title: "1,500 paratroopers put on alert for possible Minnesota deployment",
+                source: "Star Tribune",
+                date: "17.1.2026",
+                excerpt: "ABC News raportoi, että 1 500 laskuvarjojääkäriä on asetettu valmiuteen mahdollista Minnesotan sijoitusta varten. Ei lopullista päätöstä Alaskassa sijaitsevien laskuvarjojääkärien käytöstä. Raportti tulee päivän jälkeen, jolloin Minnesotassa oli jännittyneitä mielenosoituksia.",
+                url: "https://www.startribune.com/ice-raids-minnesota/601546426"
+            },
+            {
+                title: "Justice Department officials resign over handling of Minnesota ICE crisis",
+                source: "ABC News",
+                date: "24.1.2026",
+                excerpt: "Yli tusina liittovaltion syyttäjää Minneapolisissa ja Washingtonissa erosi sen jälkeen, kun oikeusministeriön kansalaisoikeusosaston johtajat kieltäytyivät avaamasta perustuslaillista tutkimusta. Tapaus johtaa institutionaalisen asiantuntemuksen menetykseen.",
+                url: "https://abcnews.go.com/US/live-updates/minneapolis-ice-shooting-live-updates-doj-investigating-apparent/?id=129340693"
+            },
+            {
+                title: "Minnesota Attorney General files lawsuit against DHS to halt ICE deployments",
+                source: "Wikipedia / Multiple Sources",
+                date: "23.1.2026",
+                excerpt: "Minnesotan oikeusministeri Keith Ellison yhdessä Minneapolis ja Saint Paulin kaupunkien kanssa nosti kanteen sisäisen turvallisuuden ministeriötä vastaan pysäyttääkseen ICE:n toiminnan osavaltiossa.",
+                url: "https://en.wikipedia.org/wiki/Operation_Metro_Surge"
+            },
+            {
+                title: "Federal judge issues preliminary injunction restricting ICE operations in Minnesota",
+                source: "Wikipedia / Multiple Sources",
+                date: "16.1.2026",
+                excerpt: "Minnesotan Yhdysvaltain piirituomiokunnan tuomari Katherine M. Menendez antoi alustavan kiellon, joka asettaa erityisiä rajoituksia Operation Metro Surgeen osallistuville liittovaltion agenteille. Tuomiossa kielletään kostotoimet rauhanomaista mielenosoitustoimintaa vastaan.",
+                url: "https://en.wikipedia.org/wiki/Operation_Metro_Surge"
+            },
+            {
+                title: "ACLU files second class-action lawsuit alleging widespread racial profiling",
+                source: "Wikipedia / Multiple Sources",
+                date: "15.1.2026",
+                excerpt: "ACLU on nostanut toisen ryhmäkanteen, jossa väitetään laajamittaista rotuperusteista profilointia liittovaltion maahanmuuttoagenttien toimesta operaation aikana. Kanteessa väitetään pidätysten perustuvan pelkästään etniseen ulkonäköön tai aksenttiin.",
+                url: "https://en.wikipedia.org/wiki/Operation_Metro_Surge"
+            },
+            {
+                title: "Over 1,000 labor unions endorse Minnesota general strike against ICE",
+                source: "Wikipedia / Multiple Sources",
+                date: "22.1.2026",
+                excerpt: "Yli tuhat ammattiliittoa, mukaan lukien Minnesota AFL-CIO, tuki yleislakkoa. Lakko sai myös Minneapolisin kaupunginvaltuuston tuen. Se saattaa olla yksi osavaltion suurimmista lakoista.",
+                url: "https://en.wikipedia.org/wiki/Operation_Metro_Surge"
+            },
+            {
+                title: "House votes to increase ICE funding amid Minnesota crisis",
+                source: "Wikipedia / Multiple Sources",
+                date: "22.1.2026",
+                excerpt: "Edustajainhuone äänesti ICE:n rahoituksen lisäämisen puolesta, vaikka Minnesotassa on meneillään kriisi, joka on johtanut kahteen kuolemaan ja massiivisiin mielenosoituksiin osavaltiossa.",
+                url: "https://en.wikipedia.org/wiki/Operation_Metro_Surge"
+            }
+        ];
 
-    // Monday-first weekday index for a date in local time (0=Mon..6=Sun)
-    function weekdayMonFirst(y, m, d){
-      const dt = new Date(y, m - 1, d);
-      const js = dt.getDay(); // 0=Sun..6=Sat
-      return (js + 6) % 7;
-    }
+        function renderArticles() {
+            const container = document.getElementById('articlesContainer');
+            
+            const articlesHTML = articles.map((article, index) => `
+                <div class="article-card" style="animation-delay: ${index * 0.05}s">
+                    <div class="article-header">
+                        <div class="article-meta">
+                            <div class="article-number">#${String(index + 1).padStart(2, '0')}</div>
+                            <div class="article-date">${article.date}</div>
+                        </div>
+                        <div class="article-source">${article.source}</div>
+                    </div>
+                    <h2 class="article-title">
+                        <a href="${article.url}" target="_blank" rel="noopener noreferrer">
+                            ${article.title}
+                        </a>
+                    </h2>
+                    <p class="article-excerpt">${article.excerpt}</p>
+                    <a href="${article.url}" target="_blank" rel="noopener noreferrer" class="article-link">
+                        Lue alkuperäinen artikkeli
+                    </a>
+                </div>
+            `).join('');
 
-    function formatFiDate(isoStr){
-      const [y, m, d] = isoStr.split("-").map(Number);
-      const dt = new Date(y, m - 1, d);
-      // Finnish-style short day + date
-      const wd = ["su","ma","ti","ke","to","pe","la"][dt.getDay()];
-      return `${wd} ${d}.${m}.${y}`;
-    }
-
-    function eur(x){
-      // Safe formatting for demo
-      return new Intl.NumberFormat("fi-FI", { minimumFractionDigits: 3, maximumFractionDigits: 3 }).format(x) + " €";
-    }
-    function celsius(x){
-      return new Intl.NumberFormat("fi-FI", { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(x) + " °C";
-    }
-
-    const tradingDays = Object.keys(NOKIA_CLOSE_EUR).sort();
-
-    function nearestTradingDay(targetIso){
-      // returns same day if exact exists; otherwise nearest by absolute day difference
-      const t = new Date(targetIso + "T00:00:00");
-      let best = tradingDays[0];
-      let bestDist = Infinity;
-      for (const d of tradingDays){
-        const dist = Math.abs(new Date(d + "T00:00:00") - t);
-        if (dist < bestDist){
-          bestDist = dist;
-          best = d;
+            container.innerHTML = articlesHTML;
         }
-      }
-      return best;
-    }
 
-    /***********************
-     * 3) BUILD CALENDAR
-     ***********************/
-    const daysGrid = document.getElementById("daysGrid");
-    const onlyTrading = document.getElementById("onlyTrading");
-    const snapToTrading = document.getElementById("snapToTrading");
-    const selectedChip = document.getElementById("selectedChip");
-
-    // Detail elements
-    const priceVal = document.getElementById("priceVal");
-    const priceSub = document.getElementById("priceSub");
-    const tempVal = document.getElementById("tempVal");
-    const tempSub = document.getElementById("tempSub");
-
-    let selectedIso = iso(YEAR, MONTH, 1);
-
-    function buildDayButton(dayNumber){
-      const key = iso(YEAR, MONTH, dayNumber);
-      const hasPrice = Object.prototype.hasOwnProperty.call(NOKIA_CLOSE_EUR, key);
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "day";
-      btn.setAttribute("role", "option");
-      btn.dataset.iso = key;
-
-      // Top row: day number + badges
-      const top = document.createElement("div");
-      top.className = "dnum";
-
-      const left = document.createElement("div");
-      left.textContent = String(dayNumber);
-
-      const badges = document.createElement("div");
-      badges.className = "badges";
-      const bPrice = document.createElement("span");
-      bPrice.className = "b price";
-      bPrice.title = "Nokia päätöskurssi saatavilla";
-      const bTemp = document.createElement("span");
-      bTemp.className = "b temp";
-      bTemp.title = "Oulun keskilämpötila (kuukausi)";
-
-      if (hasPrice) badges.appendChild(bPrice);
-      badges.appendChild(bTemp);
-
-      top.appendChild(left);
-      top.appendChild(badges);
-
-      // Preview row
-      const pv = document.createElement("div");
-      pv.className = "preview";
-
-      const p1 = document.createElement("div");
-      p1.textContent = hasPrice ? eur(NOKIA_CLOSE_EUR[key]) : "—";
-      const p2 = document.createElement("div");
-      p2.className = "small";
-      p2.textContent = celsius(OULU_DEC_2025_MEAN_C);
-
-      pv.appendChild(p1);
-      pv.appendChild(p2);
-
-      btn.appendChild(top);
-      btn.appendChild(pv);
-
-      // Click behavior
-      btn.addEventListener("click", () => {
-        if (onlyTrading.checked && !hasPrice){
-          // if only trading days view is on, non-trading buttons aren't rendered,
-          // but keep this defensive anyway:
-          return;
-        }
-        if (!hasPrice && snapToTrading.checked){
-          selectDay(nearestTradingDay(key), true);
-        } else {
-          selectDay(key, true);
-        }
-      });
-
-      // Keyboard nav
-      btn.addEventListener("keydown", (e) => {
-        const keys = ["ArrowLeft","ArrowRight","ArrowUp","ArrowDown","Enter"," "];
-        if (!keys.includes(e.key)) return;
-
-        const current = btn;
-        const all = Array.from(daysGrid.querySelectorAll(".day:not(.muted)"));
-        const idx = all.indexOf(current);
-
-        if (e.key === "Enter" || e.key === " "){
-          e.preventDefault();
-          current.click();
-          return;
-        }
-
-        const col = 7;
-        let nextIdx = idx;
-        if (e.key === "ArrowLeft") nextIdx = Math.max(0, idx - 1);
-        if (e.key === "ArrowRight") nextIdx = Math.min(all.length - 1, idx + 1);
-        if (e.key === "ArrowUp") nextIdx = Math.max(0, idx - col);
-        if (e.key === "ArrowDown") nextIdx = Math.min(all.length - 1, idx + col);
-
-        e.preventDefault();
-        all[nextIdx]?.focus();
-      });
-
-      return btn;
-    }
-
-    function renderCalendar(){
-      daysGrid.innerHTML = "";
-
-      // December 2025 starts on Monday-first offset:
-      // Determine how many empty cells before day 1 (Mon-first)
-      const firstW = weekdayMonFirst(YEAR, MONTH, 1); // 0..6
-      const daysInMonth = new Date(YEAR, MONTH, 0).getDate(); // month is 1-based above
-
-      // Leading blanks
-      for (let i=0; i<firstW; i++){
-        const blank = document.createElement("div");
-        blank.className = "day muted";
-        blank.setAttribute("aria-hidden","true");
-        blank.style.minHeight = "62px";
-        daysGrid.appendChild(blank);
-      }
-
-      // Actual days
-      for (let d=1; d<=daysInMonth; d++){
-        const key = iso(YEAR, MONTH, d);
-        const hasPrice = Object.prototype.hasOwnProperty.call(NOKIA_CLOSE_EUR, key);
-
-        if (onlyTrading.checked && !hasPrice){
-          continue;
-        }
-        const btn = buildDayButton(d);
-        // If we render only trading days, grid becomes shorter. That's fine for demo.
-        daysGrid.appendChild(btn);
-      }
-
-      // Ensure selection stays valid/visible
-      if (onlyTrading.checked && !NOKIA_CLOSE_EUR[selectedIso]){
-        selectDay(tradingDays[0], false);
-      } else {
-        syncSelectedUI();
-      }
-    }
-
-    /***********************
-     * 4) SELECTION + DETAILS
-     ***********************/
-    function syncSelectedUI(){
-      // Update aria-selected
-      const buttons = Array.from(daysGrid.querySelectorAll(".day"));
-      for (const b of buttons){
-        const isSel = b.dataset.iso === selectedIso;
-        if (b.dataset.iso) b.setAttribute("aria-selected", isSel ? "true" : "false");
-      }
-
-      selectedChip.textContent = "Valittu: " + formatFiDate(selectedIso);
-
-      // Nokia price details
-      if (Object.prototype.hasOwnProperty.call(NOKIA_CLOSE_EUR, selectedIso)){
-        const px = NOKIA_CLOSE_EUR[selectedIso];
-        priceVal.textContent = eur(px);
-        priceSub.textContent = "Nokia Oyj — päätöskurssi (" + selectedIso + ").";
-      } else {
-        priceVal.textContent = "—";
-        priceSub.textContent = "Ei kaupankäyntiä / ei päätöskurssia tälle päivälle.";
-      }
-
-      // Temperature (monthly mean, constant)
-      tempVal.textContent = celsius(OULU_DEC_2025_MEAN_C);
-      tempSub.textContent = "Oulu (Kaukovainio), joulukuun 2025 kuukausikeskiarvo.";
-    }
-
-    function selectDay(isoStr, shouldFocus){
-      selectedIso = isoStr;
-      syncSelectedUI();
-
-      // Focus selected button if present
-      if (shouldFocus){
-        const el = daysGrid.querySelector(`.day[data-iso="${CSS.escape(selectedIso)}"]`);
-        el?.focus();
-      }
-    }
-
-    /***********************
-     * 5) INIT
-     ***********************/
-    onlyTrading.addEventListener("change", renderCalendar);
-    snapToTrading.addEventListener("change", () => {
-      // no-op (behavior applies on click)
-    });
-
-    renderCalendar();
-
-    // Default: choose first trading day to guarantee "Nokia" shows immediately
-    selectDay(tradingDays[0], false);
-  </script>
+        // Render articles when page loads
+        document.addEventListener('DOMContentLoaded', renderArticles);
+    </script>
 </body>
 </html>
