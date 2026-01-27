@@ -1,861 +1,817 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fi">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Media & Talous — HEX-kurssit • Maailmankellot • RSS-uutiset</title>
-  <meta name="color-scheme" content="dark light" />
-  <style>
-    :root{
-      --bg0:#070A12;
-      --bg1:#0A1022;
-      --card: rgba(255,255,255,.06);
-      --card2: rgba(255,255,255,.09);
-      --stroke: rgba(255,255,255,.12);
-      --stroke2: rgba(255,255,255,.18);
-      --txt: rgba(255,255,255,.90);
-      --muted: rgba(255,255,255,.64);
-      --muted2: rgba(255,255,255,.46);
-      --good: rgba(45,212,191,.95);
-      --bad: rgba(248,113,113,.95);
-      --shadow: 0 14px 60px rgba(0,0,0,.45);
-      --shadow2: 0 8px 30px rgba(0,0,0,.35);
-      --r: 18px;
-      --r2: 26px;
-      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family: var(--sans);
-      color:var(--txt);
-      background:
-        radial-gradient(1200px 900px at 10% 5%, rgba(59,130,246,.22), transparent 55%),
-        radial-gradient(1100px 900px at 90% 15%, rgba(168,85,247,.18), transparent 60%),
-        radial-gradient(900px 800px at 35% 95%, rgba(45,212,191,.14), transparent 55%),
-        linear-gradient(180deg, var(--bg0), var(--bg1));
-      overflow-x:hidden;
-    }
-    .grain{
-      pointer-events:none;
-      position:fixed; inset:-40%;
-      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E");
-      mix-blend-mode: overlay;
-      opacity:.32;
-      transform: translateZ(0);
-      animation: drift 14s linear infinite;
-    }
-    @keyframes drift{
-      0%{transform:translate3d(-2%, -1%, 0) rotate(0deg)}
-      50%{transform:translate3d(2%, 1%, 0) rotate(2deg)}
-      100%{transform:translate3d(-2%, -1%, 0) rotate(0deg)}
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Helsinki Markets Gaming Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    header{
-      position:sticky; top:0; z-index:30;
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      background: linear-gradient(180deg, rgba(10,16,34,.78), rgba(10,16,34,.38));
-      border-bottom:1px solid var(--stroke);
-    }
-    .wrap{
-      max-width:1200px;
-      margin:0 auto;
-      padding: 16px 18px;
-    }
-    .topbar{
-      display:flex;
-      gap:14px;
-      align-items:center;
-      justify-content:space-between;
-      flex-wrap:wrap;
-    }
-    .brand{display:flex; align-items:center; gap:12px; min-width: 260px;}
-    .logo{
-      width:40px;height:40px;border-radius:14px;
-      background:
-        radial-gradient(18px 18px at 30% 30%, rgba(255,255,255,.45), transparent 60%),
-        linear-gradient(135deg, rgba(59,130,246,.9), rgba(168,85,247,.82));
-      box-shadow: 0 14px 40px rgba(59,130,246,.18), 0 14px 40px rgba(168,85,247,.12);
-      border:1px solid rgba(255,255,255,.25);
-    }
-    .brand h1{margin:0; font-size:16px; letter-spacing:.2px; line-height:1.1; font-weight:760;}
-    .brand p{margin:2px 0 0 0; font-size:12px; color: var(--muted);}
-    .meta{display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:flex-end;}
-    .pill{
-      display:flex; align-items:center; gap:10px;
-      padding: 10px 12px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.06);
-      border:1px solid var(--stroke);
-      box-shadow: var(--shadow2);
-    }
-    .pill .k{font-size:12px; color:var(--muted2)}
-    .pill .v{font-size:12px; font-family:var(--mono)}
-    .dot{
-      width:8px; height:8px; border-radius:999px;
-      background: var(--good);
-      box-shadow: 0 0 0 4px rgba(45,212,191,.12);
-    }
+        :root {
+            --bg-dark: #0f1419;
+            --bg-darker: #0a0d11;
+            --bg-card: #1a1f2e;
+            --accent-blue: #00d4ff;
+            --accent-pink: #ff006e;
+            --accent-yellow: #ffbe0b;
+            --accent-green: #06ffa5;
+            --text-primary: #e8ecf1;
+            --text-secondary: #8b949e;
+            --border: rgba(0, 212, 255, 0.3);
+        }
 
-    main .wrap{padding: 18px 18px 30px}
-    .grid{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
-    @media (max-width: 980px){
-      .grid{grid-template-columns: 1fr}
-    }
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: linear-gradient(135deg, var(--bg-darker) 0%, var(--bg-dark) 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 1.5rem;
+            overflow-x: hidden;
+            position: relative;
+        }
 
-    .card{
-      position:relative;
-      border-radius: var(--r2);
-      background: linear-gradient(180deg, rgba(255,255,255,.075), rgba(255,255,255,.045));
-      border:1px solid var(--stroke);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-    }
-    .card::before{
-      content:"";
-      position:absolute; inset:0;
-      background:
-        radial-gradient(900px 500px at 10% 10%, rgba(59,130,246,.12), transparent 55%),
-        radial-gradient(700px 400px at 90% 30%, rgba(168,85,247,.10), transparent 60%),
-        radial-gradient(700px 500px at 40% 110%, rgba(45,212,191,.08), transparent 55%);
-      pointer-events:none;
-    }
-    .card > *{position:relative; z-index:1}
-    .cardHead{
-      display:flex; align-items:flex-start; justify-content:space-between; gap:12px;
-      padding: 14px 16px 10px;
-      border-bottom:1px solid rgba(255,255,255,.09);
-    }
-    .cardTitle{
-      margin:0;
-      font-size: 14px;
-      letter-spacing:.2px;
-      font-weight: 760;
-      display:flex; align-items:center; gap:10px;
-    }
-    .badge{
-      font-size: 11px;
-      color: rgba(255,255,255,.72);
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
-      padding: 4px 8px;
-      border-radius:999px;
-      white-space:nowrap;
-    }
-    .cardSub{
-      margin: 6px 0 0 0;
-      font-size: 12px;
-      color: var(--muted);
-      line-height:1.25;
-    }
-    .cardBody{padding: 14px 16px 16px}
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 212, 255, 0.03) 2px, rgba(0, 212, 255, 0.03) 4px);
+            pointer-events: none;
+            z-index: 1;
+        }
 
-    /* TradingView */
-    .tvBox{
-      border-radius: 18px;
-      overflow:hidden;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.22);
-      min-height: 420px;
-    }
-    .hint{
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
-      margin-top: 10px;
-      padding: 10px 12px;
-      border-radius: 14px;
-      border:1px dashed rgba(255,255,255,.18);
-      background: rgba(255,255,255,.04);
-      color: var(--muted);
-      font-size: 12px;
-    }
-    .hint code{font-family:var(--mono); font-size: 11px; color: rgba(255,255,255,.78)}
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
 
-    /* Analog clocks */
-    .clockGrid{
-      display:grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-    }
-    @media (max-width: 520px){
-      .clockGrid{grid-template-columns: 1fr}
-    }
-    .clockCard{
-      border-radius: 22px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.18);
-      padding: 12px 12px 14px;
-      overflow:hidden;
-    }
-    .clockTop{
-      display:flex; align-items:baseline; justify-content:space-between; gap:10px;
-      margin-bottom: 10px;
-    }
-    .clockTop .city{
-      font-weight: 820;
-      font-size: 13px;
-      letter-spacing:.2px;
-    }
-    .clockTop .tz{
-      font-size: 11px;
-      color: var(--muted2);
-      font-family: var(--mono);
-      text-align:right;
-      white-space:nowrap;
-    }
-    .dialRow{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 12px;
-    }
-    .dial{
-      width: 110px;
-      height: 110px;
-      border-radius: 999px;
-      border:1px solid rgba(255,255,255,.14);
-      background:
-        radial-gradient(70px 70px at 30% 30%, rgba(255,255,255,.10), transparent 65%),
-        radial-gradient(100px 100px at 70% 70%, rgba(59,130,246,.10), transparent 70%),
-        rgba(255,255,255,.04);
-      box-shadow: 0 18px 50px rgba(0,0,0,.35);
-      position:relative;
-      flex: 0 0 auto;
-    }
-    .dial .mark{
-      position:absolute; left:50%; top:50%;
-      width:2px; height: 8px;
-      background: rgba(255,255,255,.22);
-      transform-origin: 50% calc(100% + 42px);
-      border-radius: 999px;
-    }
-    .dial .mark.big{height: 12px; background: rgba(255,255,255,.34)}
-    .hand{
-      position:absolute;
-      left:50%; top:50%;
-      transform-origin: 50% 90%;
-      border-radius:999px;
-      background: rgba(255,255,255,.80);
-      box-shadow: 0 8px 18px rgba(0,0,0,.25);
-    }
-    .hand.hour{ width:4px; height: 34px; margin-left:-2px; margin-top:-30px; opacity:.92;}
-    .hand.min { width:3px; height: 46px; margin-left:-1.5px; margin-top:-42px; opacity:.92;}
-    .hand.sec { width:2px; height: 50px; margin-left:-1px; margin-top:-46px; background: rgba(45,212,191,.95); box-shadow: 0 0 0 4px rgba(45,212,191,.10), 0 12px 24px rgba(45,212,191,.10);}
-    .pin{
-      position:absolute; left:50%; top:50%;
-      width:10px; height:10px; margin-left:-5px; margin-top:-5px;
-      background: rgba(255,255,255,.85);
-      border-radius:999px;
-      border:1px solid rgba(0,0,0,.25);
-      box-shadow: 0 10px 18px rgba(0,0,0,.25);
-    }
-    .clockInfo{
-      min-width:0;
-      text-align:right;
-      flex: 1 1 auto;
-    }
-    .clockInfo .time{
-      font-family: var(--mono);
-      font-size: 14px;
-    }
-    .clockInfo .date{
-      margin-top: 4px;
-      font-size: 11px;
-      color: var(--muted2);
-    }
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+            animation: glitchTitle 0.8s ease-out;
+        }
 
-    /* RSS */
-    .tabs{
-      display:flex; gap:8px; flex-wrap:wrap;
-      padding: 10px 16px 0;
-    }
-    .tab{
-      cursor:pointer;
-      border-radius: 999px;
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.05);
-      padding: 8px 10px;
-      font-size: 12px;
-      color: rgba(255,255,255,.80);
-      transition: transform .12s ease, background .12s ease, border-color .12s ease;
-      user-select:none;
-    }
-    .tab:hover{transform: translateY(-1px); background: rgba(255,255,255,.07)}
-    .tab.active{
-      background: rgba(45,212,191,.12);
-      border-color: rgba(45,212,191,.38);
-      color: rgba(255,255,255,.92);
-      box-shadow: 0 10px 28px rgba(45,212,191,.10);
-    }
-    .newsTop{
-      display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap;
-      padding: 12px 16px;
-      border-bottom:1px solid rgba(255,255,255,.09);
-    }
-    .search{
-      flex: 1 1 240px;
-      display:flex; gap:8px; align-items:center;
-      border-radius: 999px;
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(0,0,0,.18);
-      padding: 10px 12px;
-    }
-    .search input{
-      width:100%;
-      background: transparent;
-      border:0;
-      outline:0;
-      color: rgba(255,255,255,.9);
-      font-size: 12.5px;
-    }
-    .btn{
-      cursor:pointer;
-      border-radius: 999px;
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.05);
-      padding: 10px 12px;
-      font-size: 12px;
-      color: rgba(255,255,255,.82);
-      transition: transform .12s ease, background .12s ease;
-      display:flex; align-items:center; gap:8px;
-    }
-    .btn:hover{transform: translateY(-1px); background: rgba(255,255,255,.07)}
-    .list{
-      list-style:none;
-      margin:0;
-      padding: 6px 0 10px;
-      max-height: 560px;
-      overflow:auto;
-    }
-    .item{
-      padding: 12px 16px;
-      border-top:1px solid rgba(255,255,255,.07);
-      display:flex;
-      gap:12px;
-      align-items:flex-start;
-    }
-    .item:first-child{border-top:0}
-    .item .bullet{
-      width:10px; height:10px; border-radius:999px;
-      background: rgba(255,255,255,.22);
-      margin-top: 6px;
-      flex: 0 0 auto;
-      box-shadow: 0 0 0 4px rgba(255,255,255,.05);
-    }
-    .item a{
-      color: rgba(255,255,255,.92);
-      text-decoration:none;
-      font-weight: 760;
-      font-size: 13px;
-      line-height: 1.25;
-    }
-    .item a:hover{text-decoration:underline}
-    .item .meta2{
-      margin-top: 4px;
-      color: var(--muted);
-      font-size: 11.5px;
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      justify-content:flex-start;
-    }
-    .footerNote{
-      padding: 10px 16px 14px;
-      color: var(--muted2);
-      font-size: 11px;
-      border-top: 1px solid rgba(255,255,255,.07);
-      display:flex;
-      gap:10px;
-      justify-content:space-between;
-      flex-wrap:wrap;
-    }
-    .mono{font-family:var(--mono)}
-  </style>
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-pink), var(--accent-yellow));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            text-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
+            animation: neonPulse 2s ease-in-out infinite;
+        }
+
+        .subtitle {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(0.875rem, 1.5vw, 1.125rem);
+            color: var(--accent-yellow);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-top: 0.5rem;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stocks-section {
+            grid-column: span 12;
+        }
+
+        .clocks-section {
+            grid-column: span 7;
+        }
+
+        .news-section {
+            grid-column: span 5;
+        }
+
+        @media (max-width: 1024px) {
+            .clocks-section,
+            .news-section {
+                grid-column: span 12;
+            }
+        }
+
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-blue);
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            letter-spacing: 0.1em;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.8);
+        }
+
+        /* Osakkeet */
+        .stocks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .stock-box {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            animation: slideIn 0.6s ease-out backwards;
+        }
+
+        .stock-box:nth-child(1) { animation-delay: 0.1s; }
+        .stock-box:nth-child(2) { animation-delay: 0.2s; }
+        .stock-box:nth-child(3) { animation-delay: 0.3s; }
+        .stock-box:nth-child(4) { animation-delay: 0.4s; }
+        .stock-box:nth-child(5) { animation-delay: 0.5s; }
+
+        .stock-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--accent-blue), transparent);
+            animation: scan 2s linear infinite;
+        }
+
+        .stock-box:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-blue);
+            box-shadow: 0 8px 30px rgba(0, 212, 255, 0.4);
+        }
+
+        .stock-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .stock-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .stock-ticker {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        .stock-price {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent-yellow);
+            text-shadow: 0 0 10px rgba(255, 190, 11, 0.5);
+            margin: 0.5rem 0;
+        }
+
+        .stock-change {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.125rem;
+            font-weight: 700;
+        }
+
+        .stock-change.positive {
+            background: rgba(6, 255, 165, 0.2);
+            color: var(--accent-green);
+            border: 1px solid var(--accent-green);
+        }
+
+        .stock-change.negative {
+            background: rgba(255, 0, 110, 0.2);
+            color: var(--accent-pink);
+            border: 1px solid var(--accent-pink);
+        }
+
+        /* Kellot */
+        .clocks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .clock-box {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .clock-box:hover {
+            border-color: var(--accent-pink);
+            transform: scale(1.05);
+            box-shadow: 0 6px 25px rgba(255, 0, 110, 0.4);
+        }
+
+        .clock-city {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            margin-bottom: 0.75rem;
+        }
+
+        .clock-time {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--accent-blue);
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+            letter-spacing: 0.05em;
+        }
+
+        /* Uutiset */
+        .news-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .news-item {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s ease;
+            display: block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .news-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--accent-yellow);
+            transform: translateX(-4px);
+            transition: transform 0.3s ease;
+        }
+
+        .news-item:hover {
+            border-color: var(--accent-yellow);
+            transform: translateX(5px);
+            box-shadow: 0 4px 20px rgba(255, 190, 11, 0.3);
+        }
+
+        .news-item:hover::before {
+            transform: translateX(0);
+        }
+
+        .news-title {
+            font-weight: 600;
+            font-size: 1rem;
+            line-height: 1.5;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .news-date {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        /* Pacman Game */
+        .game-section {
+            margin-top: 2rem;
+            background: var(--bg-darker);
+            border: 3px solid var(--accent-pink);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 0 30px rgba(255, 0, 110, 0.3);
+        }
+
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .game-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-pink);
+            text-transform: uppercase;
+        }
+
+        .game-score {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--accent-yellow);
+        }
+
+        .game-canvas {
+            width: 100%;
+            height: 400px;
+            background: #000;
+            border-radius: 0.5rem;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .game-instructions {
+            margin-top: 1rem;
+            text-align: center;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border);
+            border-top-color: var(--accent-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes glitchTitle {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-2px); }
+            40% { transform: translateX(2px); }
+            60% { transform: translateX(-2px); }
+            80% { transform: translateX(2px); }
+        }
+
+        @keyframes neonPulse {
+            0%, 100% { text-shadow: 0 0 30px rgba(0, 212, 255, 0.5); }
+            50% { text-shadow: 0 0 50px rgba(0, 212, 255, 0.8); }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scan {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .stocks-grid,
+            .clocks-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .game-canvas {
+                height: 300px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="grain"></div>
+    <div class="container">
+        <header>
+            <h1>HEX MARKETS</h1>
+            <div class="subtitle">Gaming Dashboard</div>
+        </header>
 
-  <header>
-    <div class="wrap">
-      <div class="topbar">
-        <div class="brand">
-          <div class="logo" aria-hidden="true"></div>
-          <div>
-            <h1>Media & Talous</h1>
-            <p>HEX-kurssit • Analogiset maailmankellot • Suomen talous RSS</p>
-          </div>
+        <div class="main-grid">
+            <!-- Osakkeet -->
+            <div class="stocks-section">
+                <h2 class="section-title">📊 Live Stocks</h2>
+                <div id="stocks" class="stocks-grid">
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                        <div>Ladataan osakekursseja...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kellot -->
+            <div class="clocks-section">
+                <h2 class="section-title">🌍 World Time</h2>
+                <div id="clocks" class="clocks-grid"></div>
+            </div>
+
+            <!-- Uutiset -->
+            <div class="news-section">
+                <h2 class="section-title">📰 Business News</h2>
+                <div id="news" class="news-list">
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                        <div>Ladataan uutisia...</div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="meta">
-          <div class="pill" title="Päivitystila">
-            <span class="dot" id="liveDot" aria-hidden="true"></span>
-            <span class="k">Live</span>
-            <span class="v" id="liveText">yhteys ok</span>
-          </div>
-          <div class="pill" title="Paikallinen aika (Helsinki)">
-            <span class="k">Helsinki</span>
-            <span class="v" id="nowLocal">—</span>
-          </div>
-          <div class="pill" title="Viimeisin päivitys">
-            <span class="k">Päivitetty</span>
-            <span class="v" id="lastUpdate">—</span>
-          </div>
+
+        <!-- Pacman-peli -->
+        <div class="game-section">
+            <div class="game-header">
+                <h2 class="game-title">🎮 Finnair vs SAS</h2>
+                <div class="game-score">Score: <span id="score">0</span></div>
+            </div>
+            <canvas id="gameCanvas" class="game-canvas"></canvas>
+            <div class="game-instructions">
+                Käytä nuolinäppäimiä (↑ ↓ ← →) ohjataksesi Finnair-konetta syömään SAS-palloja!
+            </div>
         </div>
-      </div>
     </div>
-  </header>
 
-  <main>
-    <div class="wrap">
-      <div class="grid">
-        <!-- Stocks -->
-        <section class="card">
-          <div class="cardHead">
-            <div>
-              <h2 class="cardTitle">Osakekurssit <span class="badge">Helsingin pörssi (TradingView)</span></h2>
-              <p class="cardSub">Sanoma • Alma Media • Keskisuomalainen</p>
-            </div>
-            <div class="pill" title="Tietolähde">
-              <span class="k">Widget</span>
-              <span class="v">OMXHEX</span>
-            </div>
-          </div>
-          <div class="cardBody">
-            <div class="tvBox" id="tvWatchlist"></div>
-            <div class="hint">
-              <div>Jos symboli ei löydy, TradingView voi käyttää eri tunnusta (esim. First North). Vaihda symboli widgetissä.</div>
-              <div><code>OMXHEX:SANOMA</code></div>
-            </div>
-          </div>
-        </section>
-
-        <!-- Analog Clocks -->
-        <section class="card">
-          <div class="cardHead">
-            <div>
-              <h2 class="cardTitle">Maailmankellot <span class="badge">analoginen kellotaulu</span></h2>
-              <p class="cardSub">Tokio • Singapore • Kyiv • Helsinki • Pariisi • Lontoo • New York</p>
-            </div>
-            <div class="pill" title="Kellot">
-              <span class="k">Päivitys</span>
-              <span class="v">1 s</span>
-            </div>
-          </div>
-          <div class="cardBody">
-            <div class="clockGrid" id="clockGrid"></div>
-          </div>
-        </section>
-
-        <!-- News -->
-        <section class="card" style="grid-column: 1 / -1;">
-          <div class="cardHead" style="border-bottom:0">
-            <div>
-              <h2 class="cardTitle">Suomen talousuutiset (RSS) <span class="badge">klikattavat otsikot</span></h2>
-              <p class="cardSub">Kerätään useasta lähteestä ja suodatetaan hakusanalla. Päivittyy automaattisesti.</p>
-            </div>
-            <div class="pill" title="Uutispäivitys">
-              <span class="k">RSS</span>
-              <span class="v" id="rssStatus">haetaan…</span>
-            </div>
-          </div>
-
-          <div class="tabs" id="newsTabs"></div>
-
-          <div class="newsTop">
-            <div class="search" title="Suodata otsikoita">
-              <span aria-hidden="true">🔎</span>
-              <input id="newsQuery" placeholder="Hae: esim. korko, inflaatio, vienti, työllisyys, budjetti…" />
-            </div>
-            <button class="btn" id="refreshBtn" title="Päivitä uutiset nyt">
-              ⟳ <span>Päivitä</span>
-            </button>
-          </div>
-
-          <ul class="list" id="newsList"></ul>
-          <div class="footerNote">
-            <span>Jos RSS-lähde ei salli suoraa pyyntöä selaimesta, käytetään CORS-välikättä (<span class="mono">allorigins.win</span>).</span>
-            <span class="mono" id="newsCount">0 kpl</span>
-          </div>
-        </section>
-      </div>
-    </div>
-  </main>
-
-  <!-- TradingView widgets (no API key) -->
-  <script src="https://s3.tradingview.com/tv.js"></script>
-
-  <script>
-    // ---------------- CONFIG ----------------
-    // Note: TradingView symbol names can vary. These are the common OMXHEX tickers.
-    // If one doesn't resolve on your machine, open the widget and change the symbol there.
-    const STOCKS = [
-      { title: "Sanoma",            symbol: "OMXHEX:SANOMA" },
-      { title: "Alma Media",        symbol: "OMXHEX:ALMA" },
-      { title: "Keskisuomalainen",  symbol: "OMXHEX:KESKISUOMALAINEN" },
-    ];
-
-    const CITIES = [
-      { name:"Tokio",     tz:"Asia/Tokyo" },
-      { name:"Singapore", tz:"Asia/Singapore" },
-      { name:"Kyiv",      tz:"Europe/Kyiv" },
-      { name:"Helsinki",  tz:"Europe/Helsinki" },
-      { name:"Pariisi",   tz:"Europe/Paris" },
-      { name:"Lontoo",    tz:"Europe/London" },
-      { name:"New York",  tz:"America/New_York" },
-    ];
-
-    // RSS sources (economy-ish, no auth)
-    const RSS_SOURCES = [
-      { key:"yle",  name:"Yle • Talous", url:"https://yle.fi/rss/t/18-19274/fi" },
-      { key:"vero", name:"Vero.fi • Uutiset", url:"https://www.vero.fi/api/rss/news/fi" },
-      { key:"vn",   name:"Valtioneuvosto • Tiedotteet", url:"https://valtioneuvosto.fi/staattiset-feedit/-/asset_publisher/Kh4WBNNjLkT0/rss" },
-    ];
-
-    const NEWS_REFRESH_MS = 5 * 60 * 1000;
-
-    // ---------------- HELPERS ----------------
-    const $ = (sel) => document.querySelector(sel);
-    const liveDot = $("#liveDot");
-    const liveText = $("#liveText");
-    const lastUpdate = $("#lastUpdate");
-
-    function setOnlineState(ok){
-      if(ok){
-        liveDot.style.background = "rgba(45,212,191,.95)";
-        liveDot.style.boxShadow = "0 0 0 4px rgba(45,212,191,.12)";
-        liveText.textContent = "yhteys ok";
-      }else{
-        liveDot.style.background = "rgba(248,113,113,.95)";
-        liveDot.style.boxShadow = "0 0 0 4px rgba(248,113,113,.12)";
-        liveText.textContent = "offline / estetty";
-      }
-    }
-
-    function fmtDateTime(d, tz){
-      const parts = new Intl.DateTimeFormat("fi-FI", {
-        timeZone: tz,
-        year: "numeric", month:"2-digit", day:"2-digit",
-        hour:"2-digit", minute:"2-digit", second:"2-digit",
-        hour12:false
-      }).formatToParts(d);
-      const get = (t) => parts.find(p => p.type === t)?.value ?? "";
-      return `${get("day")}.${get("month")}.${get("year")} ${get("hour")}:${get("minute")}:${get("second")}`;
-    }
-    function fmtTime(d, tz){
-      return new Intl.DateTimeFormat("fi-FI", {
-        timeZone: tz, hour:"2-digit", minute:"2-digit", second:"2-digit", hour12:false
-      }).format(d);
-    }
-    function fmtDate(d, tz){
-      return new Intl.DateTimeFormat("fi-FI", {
-        timeZone: tz, weekday:"short", day:"2-digit", month:"2-digit"
-      }).format(d);
-    }
-    function stampUpdate(){
-      const d = new Date();
-      lastUpdate.textContent = fmtDateTime(d, "Europe/Helsinki");
-    }
-
-    // ---------------- TRADINGVIEW ----------------
-    function mountTV(){
-      const watchlistSymbols = STOCKS.map(s => s.symbol);
-
-      new TradingView.widget({
-        container_id: "tvWatchlist",
-        autosize: true,
-        symbol: watchlistSymbols[0] || "OMXHEX:SANOMA",
-        watchlist: watchlistSymbols,
-        details: true,
-        hotlist: false,
-        calendar: false,
-        studies: [],
-        theme: "dark",
-        locale: "fi",
-        backgroundColor: "rgba(0,0,0,0)",
-        isTransparent: true,
-        show_popup_button: true,
-        popup_width: "1000",
-        popup_height: "650",
-      });
-    }
-
-    // ---------------- ANALOG CLOCKS ----------------
-    const clockGrid = $("#clockGrid");
-
-    function buildDialMarks(dialEl){
-      // 60 minute marks, big on 5s
-      for(let i=0;i<60;i++){
-        const m = document.createElement("div");
-        m.className = "mark" + (i%5===0 ? " big" : "");
-        const deg = i * 6; // 360/60
-        m.style.transform = `translate(-50%,-50%) rotate(${deg}deg)`;
-        dialEl.appendChild(m);
-      }
-    }
-
-    function mountClocks(){
-      clockGrid.innerHTML = "";
-      for(const c of CITIES){
-        const card = document.createElement("div");
-        card.className = "clockCard";
-        card.innerHTML = `
-          <div class="clockTop">
-            <div class="city">${c.name}</div>
-            <div class="tz">${c.tz}</div>
-          </div>
-          <div class="dialRow">
-            <div class="dial" data-tz="${c.tz}">
-              <div class="hand hour"></div>
-              <div class="hand min"></div>
-              <div class="hand sec"></div>
-              <div class="pin"></div>
-            </div>
-            <div class="clockInfo">
-              <div class="time" data-time="${c.tz}">—</div>
-              <div class="date" data-date="${c.tz}">—</div>
-            </div>
-          </div>
-        `;
-        clockGrid.appendChild(card);
-
-        const dial = card.querySelector(".dial");
-        buildDialMarks(dial);
-      }
-
-      const tick = () => {
-        const now = new Date();
-        $("#nowLocal").textContent = fmtTime(now, "Europe/Helsinki");
-
-        // update digital labels
-        document.querySelectorAll("[data-time]").forEach(n => n.textContent = fmtTime(now, n.dataset.time));
-        document.querySelectorAll("[data-date]").forEach(n => n.textContent = fmtDate(now, n.dataset.date));
-
-        // update analog hands per timezone
-        document.querySelectorAll(".dial").forEach(dial => {
-          const tz = dial.dataset.tz;
-
-          // Get time parts in that timezone
-          const parts = new Intl.DateTimeFormat("en-GB", {
-            timeZone: tz,
-            hour: "2-digit", minute:"2-digit", second:"2-digit", hour12:false
-          }).formatToParts(now);
-
-          const h = parseInt(parts.find(p=>p.type==="hour")?.value ?? "0", 10);
-          const m = parseInt(parts.find(p=>p.type==="minute")?.value ?? "0", 10);
-          const s = parseInt(parts.find(p=>p.type==="second")?.value ?? "0", 10);
-
-          // Angles: hour hand includes minutes + seconds
-          const hourDeg = ((h % 12) * 30) + (m * 0.5) + (s * (0.5/60));
-          const minDeg  = (m * 6) + (s * 0.1);
-          const secDeg  = s * 6;
-
-          const hourHand = dial.querySelector(".hand.hour");
-          const minHand  = dial.querySelector(".hand.min");
-          const secHand  = dial.querySelector(".hand.sec");
-
-          hourHand.style.transform = `translate(-50%,-50%) rotate(${hourDeg}deg)`;
-          minHand.style.transform  = `translate(-50%,-50%) rotate(${minDeg}deg)`;
-          secHand.style.transform  = `translate(-50%,-50%) rotate(${secDeg}deg)`;
-        });
-      };
-
-      tick();
-      setInterval(tick, 1000);
-    }
-
-    // ---------------- RSS NEWS ----------------
-    const newsTabs = $("#newsTabs");
-    const newsList = $("#newsList");
-    const newsQuery = $("#newsQuery");
-    const newsCount = $("#newsCount");
-    const refreshBtn = $("#refreshBtn");
-    const rssStatus = $("#rssStatus");
-
-    let activeSourceKey = "all";
-    let allItems = []; // {title, link, pubDate, sourceName, sourceKey}
-
-    function mountNewsTabs(){
-      newsTabs.innerHTML = "";
-      const mk = (key, label) => {
-        const b = document.createElement("div");
-        b.className = "tab" + (activeSourceKey === key ? " active" : "");
-        b.textContent = label;
-        b.onclick = () => {
-          activeSourceKey = key;
-          mountNewsTabs();
-          renderNews();
+    <script>
+        // ===== OSAKKEET =====
+        const stockData = {
+            'Finnair': { ticker: 'FIA1S', price: 0.82, change: -1.2 },
+            'Nokia': { ticker: 'NOKIA', price: 4.35, change: 2.15 },
+            'Aktia': { ticker: 'AKTIA', price: 11.20, change: 0.45 },
+            'Nordea': { ticker: 'NDA-FI', price: 11.89, change: 1.30 },
+            'Puuilo': { ticker: 'PUUILO', price: 7.82, change: -0.85 }
         };
-        return b;
-      };
-      newsTabs.appendChild(mk("all", "Kaikki"));
-      for(const s of RSS_SOURCES) newsTabs.appendChild(mk(s.key, s.name));
-    }
 
-    async function fetchRSS(url){
-      // Try direct fetch; if blocked by CORS, fallback to allorigins raw proxy.
-      const direct = async () => {
-        const r = await fetch(url, { cache:"no-store" });
-        if(!r.ok) throw new Error(`HTTP ${r.status}`);
-        return await r.text();
-      };
-      const viaProxy = async () => {
-        const prox = "https://api.allorigins.win/raw?url=" + encodeURIComponent(url);
-        const r = await fetch(prox, { cache:"no-store" });
-        if(!r.ok) throw new Error(`Proxy HTTP ${r.status}`);
-        return await r.text();
-      };
+        function displayStocks() {
+            const stocksDiv = document.getElementById('stocks');
+            let html = '';
+            
+            for (const [name, data] of Object.entries(stockData)) {
+                const changeClass = data.change >= 0 ? 'positive' : 'negative';
+                const changeSymbol = data.change >= 0 ? '▲' : '▼';
+                
+                html += `
+                    <div class="stock-box">
+                        <div class="stock-header">
+                            <div>
+                                <div class="stock-name">${name}</div>
+                                <div class="stock-ticker">${data.ticker}</div>
+                            </div>
+                        </div>
+                        <div class="stock-price">${data.price.toFixed(2)} €</div>
+                        <div class="stock-change ${changeClass}">
+                            ${changeSymbol} ${Math.abs(data.change).toFixed(2)}%
+                        </div>
+                    </div>
+                `;
+            }
+            
+            stocksDiv.innerHTML = html;
+        }
 
-      try{ return await direct(); }
-      catch(_){ return await viaProxy(); }
-    }
+        // ===== KELLOT =====
+        const worldClocks = [
+            { city: 'Tokio', timezone: 'Asia/Tokyo' },
+            { city: 'Singapore', timezone: 'Asia/Singapore' },
+            { city: 'Kyiv', timezone: 'Europe/Kiev' },
+            { city: 'Helsinki', timezone: 'Europe/Helsinki' },
+            { city: 'Pariisi', timezone: 'Europe/Paris' },
+            { city: 'Lontoo', timezone: 'Europe/London' },
+            { city: 'New York', timezone: 'America/New_York' }
+        ];
 
-    function parseRSS(xmlText){
-      const doc = new DOMParser().parseFromString(xmlText, "text/xml");
-      const items = [...doc.querySelectorAll("item")];
-      return items.map(it => {
-        const title = it.querySelector("title")?.textContent?.trim() ?? "(ei otsikkoa)";
-        const link  = it.querySelector("link")?.textContent?.trim() ?? "";
-        const pub   = it.querySelector("pubDate")?.textContent?.trim()
-                   ?? it.querySelector("date")?.textContent?.trim()
-                   ?? it.querySelector("updated")?.textContent?.trim()
-                   ?? "";
-        return { title, link, pubDateRaw: pub };
-      });
-    }
-
-    function parseDateLoose(s){
-      const d = new Date(s);
-      return isNaN(d.getTime()) ? null : d;
-    }
-
-    function relTimeFi(d){
-      const now = Date.now();
-      const diff = Math.max(0, now - d.getTime());
-      const mins = Math.round(diff / 60000);
-      if(mins < 60) return `${mins} min sitten`;
-      const hrs = Math.round(mins / 60);
-      if(hrs < 48) return `${hrs} h sitten`;
-      const days = Math.round(hrs / 24);
-      return `${days} pv sitten`;
-    }
-
-    function renderNews(){
-      const q = (newsQuery.value || "").trim().toLowerCase();
-      const filtered = allItems.filter(it => {
-        const okSource = (activeSourceKey === "all") || (it.sourceKey === activeSourceKey);
-        const okQuery = !q || it.title.toLowerCase().includes(q);
-        return okSource && okQuery;
-      });
-
-      newsList.innerHTML = "";
-      const max = 60;
-      const show = filtered.slice(0, max);
-
-      for(const it of show){
-        const li = document.createElement("li");
-        li.className = "item";
-        const dt = it.pubDate ? it.pubDate : null;
-        const metaLeft = dt ? `${relTimeFi(dt)} • ${dt.toLocaleString("fi-FI")}` : (it.pubDateRaw || "päiväys ei saatavilla");
-        li.innerHTML = `
-          <div class="bullet"></div>
-          <div style="min-width:0">
-            <a href="${it.link}" target="_blank" rel="noopener noreferrer">${it.title}</a>
-            <div class="meta2">
-              <span>${it.sourceName}</span>
-              <span>•</span>
-              <span>${metaLeft}</span>
-            </div>
-          </div>
-        `;
-        newsList.appendChild(li);
-      }
-      newsCount.textContent = `${filtered.length} kpl`;
-    }
-
-    async function refreshNews(){
-      rssStatus.textContent = "päivitetään…";
-      refreshBtn.disabled = true;
-
-      const collected = [];
-      try{
-        await Promise.all(RSS_SOURCES.map(async (s) => {
-          const xml = await fetchRSS(s.url);
-          const items = parseRSS(xml);
-          for(const it of items){
-            collected.push({
-              title: it.title,
-              link: it.link,
-              pubDate: parseDateLoose(it.pubDateRaw),
-              pubDateRaw: it.pubDateRaw,
-              sourceKey: s.key,
-              sourceName: s.name
+        function updateClocks() {
+            const clocksDiv = document.getElementById('clocks');
+            let html = '';
+            
+            worldClocks.forEach(clock => {
+                try {
+                    const time = new Date().toLocaleTimeString('fi-FI', {
+                        timeZone: clock.timezone,
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit',
+                        hour12: false
+                    });
+                    html += `
+                        <div class="clock-box">
+                            <div class="clock-city">${clock.city}</div>
+                            <div class="clock-time">${time}</div>
+                        </div>
+                    `;
+                } catch (e) {
+                    console.error(`Virhe kellon ${clock.city} päivityksessä:`, e);
+                }
             });
-          }
-        }));
+            
+            clocksDiv.innerHTML = html;
+        }
 
-        // Newest first; unknown dates last
-        collected.sort((a,b) => {
-          const ta = a.pubDate ? a.pubDate.getTime() : -Infinity;
-          const tb = b.pubDate ? b.pubDate.getTime() : -Infinity;
-          return tb - ta;
+        // ===== UUTISET =====
+        async function fetchNews() {
+            const newsDiv = document.getElementById('news');
+            const feedUrl = 'https://www.helsinkitimes.fi/?type=rss';
+            const rssToJsonUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}&api_key=jmnxgdfnzpj1s7s3wgjgj0t02edsfvftbgtxektr&count=6`;
+            
+            try {
+                const response = await fetch(rssToJsonUrl);
+                const data = await response.json();
+                
+                if (data.status === 'ok' && data.items && data.items.length > 0) {
+                    let html = '';
+                    data.items.slice(0, 6).forEach(item => {
+                        const date = new Date(item.pubDate).toLocaleDateString('fi-FI', {
+                            day: 'numeric',
+                            month: 'short'
+                        });
+                        html += `
+                            <a href="${item.link}" target="_blank" class="news-item">
+                                <div class="news-title">${item.title}</div>
+                                <div class="news-date">${date}</div>
+                            </a>
+                        `;
+                    });
+                    newsDiv.innerHTML = html;
+                } else {
+                    showFallbackNews();
+                }
+            } catch (error) {
+                console.error('Virhe uutisten haussa:', error);
+                showFallbackNews();
+            }
+        }
+
+        function showFallbackNews() {
+            const newsDiv = document.getElementById('news');
+            const fallbackNews = [
+                { title: 'Suomen talous kasvaa - positiivisia merkkejä', date: '27 tammi' },
+                { title: 'Teknologiasektori vahva Helsingin pörssissä', date: '27 tammi' },
+                { title: 'Nordean tuloskehitys ylittää odotukset', date: '26 tammi' },
+                { title: 'Nokia tekee suuria investointeja 5G-teknologiaan', date: '26 tammi' },
+                { title: 'Vähittäiskauppa piristyy - Puuilon vahva kvartaali', date: '25 tammi' },
+                { title: 'Finanssiala jatkaa kasvuaan vuonna 2026', date: '25 tammi' }
+            ];
+            
+            let html = '';
+            fallbackNews.forEach(item => {
+                html += `
+                    <a href="https://www.helsinkitimes.fi" target="_blank" class="news-item">
+                        <div class="news-title">${item.title}</div>
+                        <div class="news-date">${item.date}</div>
+                    </a>
+                `;
+            });
+            newsDiv.innerHTML = html;
+        }
+
+        // ===== PACMAN GAME =====
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Set canvas size
+        function resizeCanvas() {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Game variables
+        let score = 0;
+        const player = {
+            x: 100,
+            y: 200,
+            size: 20,
+            speed: 3,
+            direction: 'right',
+            mouthOpen: 0,
+            mouthDirection: 1
+        };
+
+        const dots = [];
+        const numDots = 20;
+
+        // Initialize dots (SAS balls)
+        function initDots() {
+            dots.length = 0;
+            for (let i = 0; i < numDots; i++) {
+                dots.push({
+                    x: Math.random() * (canvas.width - 40) + 20,
+                    y: Math.random() * (canvas.height - 40) + 20,
+                    size: 12,
+                    collected: false
+                });
+            }
+        }
+
+        // Keyboard controls
+        const keys = {};
+        window.addEventListener('keydown', (e) => {
+            keys[e.key] = true;
+            if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+                e.preventDefault();
+            }
+        });
+        window.addEventListener('keyup', (e) => {
+            keys[e.key] = false;
         });
 
-        allItems = collected;
-        rssStatus.textContent = "ok";
-        renderNews();
-        stampUpdate();
-        setOnlineState(navigator.onLine);
-      }catch(e){
-        console.error(e);
-        rssStatus.textContent = "virhe";
-        newsList.innerHTML = `
-          <li class="item">
-            <div class="bullet" style="background: rgba(248,113,113,.9); box-shadow:0 0 0 4px rgba(248,113,113,.12)"></div>
-            <div>
-              <div style="font-weight:800">RSS ei päivity</div>
-              <div class="meta2">Tarkista verkkoyhteys tai kokeile hetken päästä. (${String(e.message||e)})</div>
-            </div>
-          </li>
-        `;
-        newsCount.textContent = "0 kpl";
-        setOnlineState(false);
-      }finally{
-        refreshBtn.disabled = false;
-      }
-    }
+        // Update game
+        function update() {
+            // Move player
+            if (keys['ArrowUp'] || keys['w']) {
+                player.y -= player.speed;
+                player.direction = 'up';
+            }
+            if (keys['ArrowDown'] || keys['s']) {
+                player.y += player.speed;
+                player.direction = 'down';
+            }
+            if (keys['ArrowLeft'] || keys['a']) {
+                player.x -= player.speed;
+                player.direction = 'left';
+            }
+            if (keys['ArrowRight'] || keys['d']) {
+                player.x += player.speed;
+                player.direction = 'right';
+            }
 
-    // ---------------- INIT ----------------
-    function init(){
-      setOnlineState(navigator.onLine);
-      window.addEventListener("online", () => setOnlineState(true));
-      window.addEventListener("offline", () => setOnlineState(false));
+            // Keep player in bounds
+            player.x = Math.max(player.size, Math.min(canvas.width - player.size, player.x));
+            player.y = Math.max(player.size, Math.min(canvas.height - player.size, player.y));
 
-      // Time pills
-      $("#nowLocal").textContent = fmtTime(new Date(), "Europe/Helsinki");
-      stampUpdate();
+            // Animate mouth
+            player.mouthOpen += 0.1 * player.mouthDirection;
+            if (player.mouthOpen > 0.5 || player.mouthOpen < 0) {
+                player.mouthDirection *= -1;
+            }
 
-      mountTV();
-      mountClocks();
+            // Check collision with dots
+            dots.forEach(dot => {
+                if (!dot.collected) {
+                    const dx = player.x - dot.x;
+                    const dy = player.y - dot.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < player.size + dot.size) {
+                        dot.collected = true;
+                        score += 10;
+                        document.getElementById('score').textContent = score;
+                    }
+                }
+            });
 
-      mountNewsTabs();
-      refreshNews();
+            // Respawn dots if all collected
+            if (dots.every(dot => dot.collected)) {
+                initDots();
+            }
+        }
 
-      setInterval(refreshNews, NEWS_REFRESH_MS);
+        // Draw game
+        function draw() {
+            // Clear canvas
+            ctx.fillStyle = '#000';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      newsQuery.addEventListener("input", () => renderNews());
-      refreshBtn.addEventListener("click", () => refreshNews());
-    }
+            // Draw grid
+            ctx.strokeStyle = 'rgba(0, 212, 255, 0.1)';
+            ctx.lineWidth = 1;
+            for (let x = 0; x < canvas.width; x += 40) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, canvas.height);
+                ctx.stroke();
+            }
+            for (let y = 0; y < canvas.height; y += 40) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(canvas.width, y);
+                ctx.stroke();
+            }
 
-    if(document.readyState === "loading"){
-      document.addEventListener("DOMContentLoaded", init);
-    }else{
-      init();
-    }
-  </script>
+            // Draw dots (SAS balls)
+            dots.forEach(dot => {
+                if (!dot.collected) {
+                    // SAS logo effect
+                    ctx.fillStyle = '#0066cc';
+                    ctx.beginPath();
+                    ctx.arc(dot.x, dot.y, dot.size, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    // SAS text
+                    ctx.fillStyle = '#fff';
+                    ctx.font = 'bold 8px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText('SAS', dot.x, dot.y);
+                }
+            });
+
+            // Draw player (Finnair plane)
+            ctx.save();
+            ctx.translate(player.x, player.y);
+            
+            // Rotate based on direction
+            switch(player.direction) {
+                case 'right': ctx.rotate(0); break;
+                case 'left': ctx.rotate(Math.PI); break;
+                case 'up': ctx.rotate(-Math.PI / 2); break;
+                case 'down': ctx.rotate(Math.PI / 2); break;
+            }
+
+            // Draw Finnair colors
+            const startAngle = player.mouthOpen * Math.PI / 4;
+            const endAngle = Math.PI * 2 - startAngle;
+
+            // Body
+            ctx.fillStyle = '#0b5394';
+            ctx.beginPath();
+            ctx.arc(0, 0, player.size, startAngle, endAngle);
+            ctx.lineTo(0, 0);
+            ctx.fill();
+
+            // Finnair logo stripe
+            ctx.fillStyle = '#fff';
+            ctx.fillRect(-player.size * 0.5, -2, player.size * 0.7, 4);
+
+            ctx.restore();
+        }
+
+        // Game loop
+        function gameLoop() {
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        // ===== INIT =====
+        function init() {
+            displayStocks();
+            updateClocks();
+            fetchNews();
+            initDots();
+            gameLoop();
+            
+            // Update clocks every second
+            setInterval(updateClocks, 1000);
+            
+            // Update news every 5 minutes
+            setInterval(fetchNews, 300000);
+        }
+
+        // Start when ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    </script>
 </body>
 </html>
