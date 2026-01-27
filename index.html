@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Suomi Dashboard — HEX-osakkeet • Maailmankellot • Sää • Talousuutiset</title>
+  <title>Media & Talous — HEX-kurssit • Maailmankellot • RSS-uutiset</title>
   <meta name="color-scheme" content="dark light" />
   <style>
     :root{
@@ -17,7 +17,6 @@
       --muted: rgba(255,255,255,.64);
       --muted2: rgba(255,255,255,.46);
       --good: rgba(45,212,191,.95);
-      --warn: rgba(251,191,36,.95);
       --bad: rgba(248,113,113,.95);
       --shadow: 0 14px 60px rgba(0,0,0,.45);
       --shadow2: 0 8px 30px rgba(0,0,0,.35);
@@ -35,18 +34,16 @@
       background:
         radial-gradient(1200px 900px at 10% 5%, rgba(59,130,246,.22), transparent 55%),
         radial-gradient(1100px 900px at 90% 15%, rgba(168,85,247,.18), transparent 60%),
-        radial-gradient(900px 800px at 35% 95%, rgba(45,212,191,.16), transparent 55%),
+        radial-gradient(900px 800px at 35% 95%, rgba(45,212,191,.14), transparent 55%),
         linear-gradient(180deg, var(--bg0), var(--bg1));
       overflow-x:hidden;
     }
-
-    /* subtle animated grain */
     .grain{
       pointer-events:none;
       position:fixed; inset:-40%;
       background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E");
       mix-blend-mode: overlay;
-      opacity:.35;
+      opacity:.32;
       transform: translateZ(0);
       animation: drift 14s linear infinite;
     }
@@ -75,10 +72,7 @@
       justify-content:space-between;
       flex-wrap:wrap;
     }
-    .brand{
-      display:flex; align-items:center; gap:12px;
-      min-width: 260px;
-    }
+    .brand{display:flex; align-items:center; gap:12px; min-width: 260px;}
     .logo{
       width:40px;height:40px;border-radius:14px;
       background:
@@ -87,22 +81,9 @@
       box-shadow: 0 14px 40px rgba(59,130,246,.18), 0 14px 40px rgba(168,85,247,.12);
       border:1px solid rgba(255,255,255,.25);
     }
-    .brand h1{
-      margin:0;
-      font-size: 16px;
-      letter-spacing:.2px;
-      line-height:1.1;
-      font-weight: 760;
-    }
-    .brand p{
-      margin:2px 0 0 0;
-      font-size: 12px;
-      color: var(--muted);
-    }
-    .meta{
-      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
-      justify-content:flex-end;
-    }
+    .brand h1{margin:0; font-size:16px; letter-spacing:.2px; line-height:1.1; font-weight:760;}
+    .brand p{margin:2px 0 0 0; font-size:12px; color: var(--muted);}
+    .meta{display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:flex-end;}
     .pill{
       display:flex; align-items:center; gap:10px;
       padding: 10px 12px;
@@ -122,7 +103,7 @@
     main .wrap{padding: 18px 18px 30px}
     .grid{
       display:grid;
-      grid-template-columns: 1.2fr .8fr;
+      grid-template-columns: 1fr 1fr;
       gap: 14px;
     }
     @media (max-width: 980px){
@@ -159,13 +140,14 @@
       font-weight: 760;
       display:flex; align-items:center; gap:10px;
     }
-    .cardTitle .badge{
+    .badge{
       font-size: 11px;
       color: rgba(255,255,255,.72);
       border: 1px solid rgba(255,255,255,.14);
       background: rgba(255,255,255,.06);
       padding: 4px 8px;
       border-radius:999px;
+      white-space:nowrap;
     }
     .cardSub{
       margin: 6px 0 0 0;
@@ -175,21 +157,13 @@
     }
     .cardBody{padding: 14px 16px 16px}
 
-    /* stocks */
+    /* TradingView */
     .tvBox{
-      border-radius: 16px;
+      border-radius: 18px;
       overflow:hidden;
       border:1px solid rgba(255,255,255,.10);
       background: rgba(0,0,0,.22);
-    }
-    .miniRow{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 12px;
-    }
-    @media (max-width: 680px){
-      .miniRow{grid-template-columns: 1fr}
+      min-height: 420px;
     }
     .hint{
       display:flex; align-items:center; justify-content:space-between; gap:10px;
@@ -203,79 +177,100 @@
     }
     .hint code{font-family:var(--mono); font-size: 11px; color: rgba(255,255,255,.78)}
 
-    /* clocks + weather */
+    /* Analog clocks */
     .clockGrid{
       display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
     }
     @media (max-width: 520px){
       .clockGrid{grid-template-columns: 1fr}
     }
-    .clock{
-      border-radius: 18px;
+    .clockCard{
+      border-radius: 22px;
       border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.04);
-      padding: 12px 12px;
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      background: rgba(0,0,0,.18);
+      padding: 12px 12px 14px;
+      overflow:hidden;
     }
-    .clock .city{
-      font-weight: 760;
+    .clockTop{
+      display:flex; align-items:baseline; justify-content:space-between; gap:10px;
+      margin-bottom: 10px;
+    }
+    .clockTop .city{
+      font-weight: 820;
       font-size: 13px;
       letter-spacing:.2px;
     }
-    .clock .tz{
+    .clockTop .tz{
       font-size: 11px;
       color: var(--muted2);
-      margin-top: 2px;
+      font-family: var(--mono);
+      text-align:right;
+      white-space:nowrap;
     }
-    .clock .time{
+    .dialRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+    }
+    .dial{
+      width: 110px;
+      height: 110px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.14);
+      background:
+        radial-gradient(70px 70px at 30% 30%, rgba(255,255,255,.10), transparent 65%),
+        radial-gradient(100px 100px at 70% 70%, rgba(59,130,246,.10), transparent 70%),
+        rgba(255,255,255,.04);
+      box-shadow: 0 18px 50px rgba(0,0,0,.35);
+      position:relative;
+      flex: 0 0 auto;
+    }
+    .dial .mark{
+      position:absolute; left:50%; top:50%;
+      width:2px; height: 8px;
+      background: rgba(255,255,255,.22);
+      transform-origin: 50% calc(100% + 42px);
+      border-radius: 999px;
+    }
+    .dial .mark.big{height: 12px; background: rgba(255,255,255,.34)}
+    .hand{
+      position:absolute;
+      left:50%; top:50%;
+      transform-origin: 50% 90%;
+      border-radius:999px;
+      background: rgba(255,255,255,.80);
+      box-shadow: 0 8px 18px rgba(0,0,0,.25);
+    }
+    .hand.hour{ width:4px; height: 34px; margin-left:-2px; margin-top:-30px; opacity:.92;}
+    .hand.min { width:3px; height: 46px; margin-left:-1.5px; margin-top:-42px; opacity:.92;}
+    .hand.sec { width:2px; height: 50px; margin-left:-1px; margin-top:-46px; background: rgba(45,212,191,.95); box-shadow: 0 0 0 4px rgba(45,212,191,.10), 0 12px 24px rgba(45,212,191,.10);}
+    .pin{
+      position:absolute; left:50%; top:50%;
+      width:10px; height:10px; margin-left:-5px; margin-top:-5px;
+      background: rgba(255,255,255,.85);
+      border-radius:999px;
+      border:1px solid rgba(0,0,0,.25);
+      box-shadow: 0 10px 18px rgba(0,0,0,.25);
+    }
+    .clockInfo{
+      min-width:0;
+      text-align:right;
+      flex: 1 1 auto;
+    }
+    .clockInfo .time{
       font-family: var(--mono);
       font-size: 14px;
-      text-align:right;
     }
-    .clock .date{
+    .clockInfo .date{
+      margin-top: 4px;
       font-size: 11px;
       color: var(--muted2);
-      text-align:right;
-      margin-top: 2px;
     }
 
-    .weatherGrid{
-      margin-top: 12px;
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-    @media (max-width: 520px){
-      .weatherGrid{grid-template-columns: 1fr}
-    }
-    .wx{
-      border-radius: 18px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.18);
-      padding: 12px 12px;
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
-      min-height: 74px;
-    }
-    .wx .left{min-width: 0}
-    .wx .city{font-weight: 760; font-size: 13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
-    .wx .desc{font-size: 12px; color: var(--muted); margin-top: 2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
-    .wx .right{text-align:right}
-    .wx .temp{font-family: var(--mono); font-size: 18px}
-    .wx .meta2{font-size: 11px; color: var(--muted2); margin-top: 2px}
-    .wx .ico{
-      width: 34px; height: 34px;
-      display:grid; place-items:center;
-      border-radius: 14px;
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
-      margin-left: 8px;
-      flex: 0 0 auto;
-      font-size: 16px;
-    }
-
-    /* news */
+    /* RSS */
     .tabs{
       display:flex; gap:8px; flex-wrap:wrap;
       padding: 10px 16px 0;
@@ -356,12 +351,12 @@
     .item a{
       color: rgba(255,255,255,.92);
       text-decoration:none;
-      font-weight: 700;
+      font-weight: 760;
       font-size: 13px;
       line-height: 1.25;
     }
     .item a:hover{text-decoration:underline}
-    .item .meta{
+    .item .meta2{
       margin-top: 4px;
       color: var(--muted);
       font-size: 11.5px;
@@ -381,9 +376,6 @@
       flex-wrap:wrap;
     }
     .mono{font-family:var(--mono)}
-    .ok{color: var(--good)}
-    .warn{color: var(--warn)}
-    .bad{color: var(--bad)}
   </style>
 </head>
 <body>
@@ -395,8 +387,8 @@
         <div class="brand">
           <div class="logo" aria-hidden="true"></div>
           <div>
-            <h1>Suomi Dashboard</h1>
-            <p>HEX-osakkeet • Maailmankellot • Sää • Talousuutiset</p>
+            <h1>Media & Talous</h1>
+            <p>HEX-kurssit • Analogiset maailmankellot • Suomen talous RSS</p>
           </div>
         </div>
         <div class="meta">
@@ -421,12 +413,12 @@
   <main>
     <div class="wrap">
       <div class="grid">
-        <!-- LEFT: Stocks -->
+        <!-- Stocks -->
         <section class="card">
           <div class="cardHead">
             <div>
               <h2 class="cardTitle">Osakekurssit <span class="badge">Helsingin pörssi (TradingView)</span></h2>
-              <p class="cardSub">Mandatum • Finnair • UPM • Summa • Sanoma</p>
+              <p class="cardSub">Sanoma • Alma Media • Keskisuomalainen</p>
             </div>
             <div class="pill" title="Tietolähde">
               <span class="k">Widget</span>
@@ -434,43 +426,36 @@
             </div>
           </div>
           <div class="cardBody">
-            <div class="tvBox" id="tvWatchlist" style="height: 420px;"></div>
-
-            <div class="miniRow">
-              <div class="tvBox" id="tvMandatum" style="height: 240px;"></div>
-              <div class="tvBox" id="tvUPM" style="height: 240px;"></div>
-            </div>
-
+            <div class="tvBox" id="tvWatchlist"></div>
             <div class="hint">
-              <div>Vinkki: jos jokin symboli ei löydy, TradingView voi käyttää eri tunnusta (esim. First North).</div>
+              <div>Jos symboli ei löydy, TradingView voi käyttää eri tunnusta (esim. First North). Vaihda symboli widgetissä.</div>
               <div><code>OMXHEX:SANOMA</code></div>
             </div>
           </div>
         </section>
 
-        <!-- RIGHT: Clocks + Weather -->
+        <!-- Analog Clocks -->
         <section class="card">
           <div class="cardHead">
             <div>
-              <h2 class="cardTitle">Maailmankellot & sää <span class="badge">Open-Meteo</span></h2>
+              <h2 class="cardTitle">Maailmankellot <span class="badge">analoginen kellotaulu</span></h2>
               <p class="cardSub">Tokio • Singapore • Kyiv • Helsinki • Pariisi • Lontoo • New York</p>
             </div>
-            <div class="pill" title="Sääpäivitys">
-              <span class="k">Sää</span>
-              <span class="v" id="wxStatus">haetaan…</span>
+            <div class="pill" title="Kellot">
+              <span class="k">Päivitys</span>
+              <span class="v">1 s</span>
             </div>
           </div>
           <div class="cardBody">
             <div class="clockGrid" id="clockGrid"></div>
-            <div class="weatherGrid" id="weatherGrid" aria-live="polite"></div>
           </div>
         </section>
 
-        <!-- FULL: News -->
+        <!-- News -->
         <section class="card" style="grid-column: 1 / -1;">
           <div class="cardHead" style="border-bottom:0">
             <div>
-              <h2 class="cardTitle">Talousuutiset (RSS) <span class="badge">klikattavat otsikot</span></h2>
+              <h2 class="cardTitle">Suomen talousuutiset (RSS) <span class="badge">klikattavat otsikot</span></h2>
               <p class="cardSub">Kerätään useasta lähteestä ja suodatetaan hakusanalla. Päivittyy automaattisesti.</p>
             </div>
             <div class="pill" title="Uutispäivitys">
@@ -505,48 +490,39 @@
   <script src="https://s3.tradingview.com/tv.js"></script>
 
   <script>
-    // ---------- Config ----------
+    // ---------------- CONFIG ----------------
+    // Note: TradingView symbol names can vary. These are the common OMXHEX tickers.
+    // If one doesn't resolve on your machine, open the widget and change the symbol there.
     const STOCKS = [
-      { title: "Mandatum", symbol: "OMXHEX:MANDATUM" },
-      { title: "Finnair",  symbol: "OMXHEX:FINNAIR" },
-      { title: "UPM",      symbol: "OMXHEX:UPM" },
-      { title: "Summa",    symbol: "OMXHEX:SUMMA" },
-      { title: "Sanoma",   symbol: "OMXHEX:SANOMA" },
+      { title: "Sanoma",            symbol: "OMXHEX:SANOMA" },
+      { title: "Alma Media",        symbol: "OMXHEX:ALMA" },
+      { title: "Keskisuomalainen",  symbol: "OMXHEX:KESKISUOMALAINEN" },
     ];
 
-    // Coordinates are fixed for reliability; weather via Open-Meteo (no key, CORS-friendly)
     const CITIES = [
-      { name:"Tokio",      tz:"Asia/Tokyo",         lat:35.6762, lon:139.6503 },
-      { name:"Singapore",  tz:"Asia/Singapore",     lat:1.3521,  lon:103.8198 },
-      { name:"Kyiv",       tz:"Europe/Kyiv",        lat:50.4501, lon:30.5234 },
-      { name:"Helsinki",   tz:"Europe/Helsinki",    lat:60.1699, lon:24.9384 },
-      { name:"Pariisi",    tz:"Europe/Paris",       lat:48.8566, lon:2.3522 },
-      { name:"Lontoo",     tz:"Europe/London",      lat:51.5072, lon:-0.1276 },
-      { name:"New York",   tz:"America/New_York",   lat:40.7128, lon:-74.0060 },
+      { name:"Tokio",     tz:"Asia/Tokyo" },
+      { name:"Singapore", tz:"Asia/Singapore" },
+      { name:"Kyiv",      tz:"Europe/Kyiv" },
+      { name:"Helsinki",  tz:"Europe/Helsinki" },
+      { name:"Pariisi",   tz:"Europe/Paris" },
+      { name:"Lontoo",    tz:"Europe/London" },
+      { name:"New York",  tz:"America/New_York" },
     ];
 
-    // RSS sources (Finland economy-ish)
-    // - Yle Talous RSS: https://yle.fi/rss/t/18-19274/fi  (listed on Yle RSS page)
-    // - Vero.fi RSS API: https://www.vero.fi/api/rss/news/fi
-    // - Valtioneuvosto tiedotteet RSS: https://valtioneuvosto.fi/staattiset-feedit/-/asset_publisher/Kh4WBNNjLkT0/rss
+    // RSS sources (economy-ish, no auth)
     const RSS_SOURCES = [
       { key:"yle",  name:"Yle • Talous", url:"https://yle.fi/rss/t/18-19274/fi" },
       { key:"vero", name:"Vero.fi • Uutiset", url:"https://www.vero.fi/api/rss/news/fi" },
       { key:"vn",   name:"Valtioneuvosto • Tiedotteet", url:"https://valtioneuvosto.fi/staattiset-feedit/-/asset_publisher/Kh4WBNNjLkT0/rss" },
     ];
 
-    const WEATHER_REFRESH_MS = 10 * 60 * 1000; // 10 min
-    const NEWS_REFRESH_MS    = 5 * 60 * 1000;  // 5 min
+    const NEWS_REFRESH_MS = 5 * 60 * 1000;
 
-    // ---------- UI helpers ----------
+    // ---------------- HELPERS ----------------
     const $ = (sel) => document.querySelector(sel);
-    const clockGrid = $("#clockGrid");
-    const weatherGrid = $("#weatherGrid");
-    const wxStatus = $("#wxStatus");
-    const rssStatus = $("#rssStatus");
-    const lastUpdate = $("#lastUpdate");
     const liveDot = $("#liveDot");
     const liveText = $("#liveText");
+    const lastUpdate = $("#lastUpdate");
 
     function setOnlineState(ok){
       if(ok){
@@ -565,12 +541,11 @@
         timeZone: tz,
         year: "numeric", month:"2-digit", day:"2-digit",
         hour:"2-digit", minute:"2-digit", second:"2-digit",
-        hour12: false
+        hour12:false
       }).formatToParts(d);
       const get = (t) => parts.find(p => p.type === t)?.value ?? "";
       return `${get("day")}.${get("month")}.${get("year")} ${get("hour")}:${get("minute")}:${get("second")}`;
     }
-
     function fmtTime(d, tz){
       return new Intl.DateTimeFormat("fi-FI", {
         timeZone: tz, hour:"2-digit", minute:"2-digit", second:"2-digit", hour12:false
@@ -581,22 +556,19 @@
         timeZone: tz, weekday:"short", day:"2-digit", month:"2-digit"
       }).format(d);
     }
-
     function stampUpdate(){
       const d = new Date();
       lastUpdate.textContent = fmtDateTime(d, "Europe/Helsinki");
     }
 
-    // ---------- TradingView ----------
+    // ---------------- TRADINGVIEW ----------------
     function mountTV(){
-      // Watchlist
       const watchlistSymbols = STOCKS.map(s => s.symbol);
 
-      // Main watchlist widget
       new TradingView.widget({
         container_id: "tvWatchlist",
         autosize: true,
-        symbol: "OMXHEX:OMXH25", // any; watchlist is the star here
+        symbol: watchlistSymbols[0] || "OMXHEX:SANOMA",
         watchlist: watchlistSymbols,
         details: true,
         hotlist: false,
@@ -610,168 +582,102 @@
         popup_width: "1000",
         popup_height: "650",
       });
-
-      // Mini charts (symbol overview)
-      const mini = (containerId, sym) => new TradingView.widget({
-        container_id: containerId,
-        width: "100%",
-        height: "100%",
-        symbol: sym,
-        interval: "D",
-        timezone: "Europe/Helsinki",
-        theme: "dark",
-        style: "3",
-        locale: "fi",
-        allow_symbol_change: true,
-        details: true,
-        calendar: false,
-        withdateranges: false,
-        hide_side_toolbar: true,
-        hide_top_toolbar: true,
-        hide_legend: false,
-        save_image: false,
-        backgroundColor: "rgba(0,0,0,0)",
-        isTransparent: true,
-      });
-
-      mini("tvMandatum", "OMXHEX:MANDATUM");
-      mini("tvUPM", "OMXHEX:UPM");
     }
 
-    // ---------- Clocks ----------
+    // ---------------- ANALOG CLOCKS ----------------
+    const clockGrid = $("#clockGrid");
+
+    function buildDialMarks(dialEl){
+      // 60 minute marks, big on 5s
+      for(let i=0;i<60;i++){
+        const m = document.createElement("div");
+        m.className = "mark" + (i%5===0 ? " big" : "");
+        const deg = i * 6; // 360/60
+        m.style.transform = `translate(-50%,-50%) rotate(${deg}deg)`;
+        dialEl.appendChild(m);
+      }
+    }
+
     function mountClocks(){
       clockGrid.innerHTML = "";
       for(const c of CITIES){
-        const el = document.createElement("div");
-        el.className = "clock";
-        el.innerHTML = `
-          <div>
+        const card = document.createElement("div");
+        card.className = "clockCard";
+        card.innerHTML = `
+          <div class="clockTop">
             <div class="city">${c.name}</div>
             <div class="tz">${c.tz}</div>
           </div>
-          <div>
-            <div class="time" data-time="${c.tz}">—</div>
-            <div class="date" data-date="${c.tz}">—</div>
+          <div class="dialRow">
+            <div class="dial" data-tz="${c.tz}">
+              <div class="hand hour"></div>
+              <div class="hand min"></div>
+              <div class="hand sec"></div>
+              <div class="pin"></div>
+            </div>
+            <div class="clockInfo">
+              <div class="time" data-time="${c.tz}">—</div>
+              <div class="date" data-date="${c.tz}">—</div>
+            </div>
           </div>
         `;
-        clockGrid.appendChild(el);
+        clockGrid.appendChild(card);
+
+        const dial = card.querySelector(".dial");
+        buildDialMarks(dial);
       }
+
       const tick = () => {
         const now = new Date();
         $("#nowLocal").textContent = fmtTime(now, "Europe/Helsinki");
+
+        // update digital labels
         document.querySelectorAll("[data-time]").forEach(n => n.textContent = fmtTime(now, n.dataset.time));
         document.querySelectorAll("[data-date]").forEach(n => n.textContent = fmtDate(now, n.dataset.date));
+
+        // update analog hands per timezone
+        document.querySelectorAll(".dial").forEach(dial => {
+          const tz = dial.dataset.tz;
+
+          // Get time parts in that timezone
+          const parts = new Intl.DateTimeFormat("en-GB", {
+            timeZone: tz,
+            hour: "2-digit", minute:"2-digit", second:"2-digit", hour12:false
+          }).formatToParts(now);
+
+          const h = parseInt(parts.find(p=>p.type==="hour")?.value ?? "0", 10);
+          const m = parseInt(parts.find(p=>p.type==="minute")?.value ?? "0", 10);
+          const s = parseInt(parts.find(p=>p.type==="second")?.value ?? "0", 10);
+
+          // Angles: hour hand includes minutes + seconds
+          const hourDeg = ((h % 12) * 30) + (m * 0.5) + (s * (0.5/60));
+          const minDeg  = (m * 6) + (s * 0.1);
+          const secDeg  = s * 6;
+
+          const hourHand = dial.querySelector(".hand.hour");
+          const minHand  = dial.querySelector(".hand.min");
+          const secHand  = dial.querySelector(".hand.sec");
+
+          hourHand.style.transform = `translate(-50%,-50%) rotate(${hourDeg}deg)`;
+          minHand.style.transform  = `translate(-50%,-50%) rotate(${minDeg}deg)`;
+          secHand.style.transform  = `translate(-50%,-50%) rotate(${secDeg}deg)`;
+        });
       };
+
       tick();
       setInterval(tick, 1000);
     }
 
-    // ---------- Weather (Open-Meteo) ----------
-    function weatherCodeToText(code){
-      // Open-Meteo WMO weather interpretation codes (common subset)
-      const map = new Map([
-        [0,  ["☀️", "Selkeää"]],
-        [1,  ["🌤️", "Melko selkeää"]],
-        [2,  ["⛅", "Puolipilvistä"]],
-        [3,  ["☁️", "Pilvistä"]],
-        [45, ["🌫️", "Sumua"]],
-        [48, ["🌫️", "Jäätävää sumua"]],
-        [51, ["🌦️", "Tihkusadetta"]],
-        [53, ["🌦️", "Tihkusadetta"]],
-        [55, ["🌧️", "Tihkua, runsasta"]],
-        [61, ["🌧️", "Sadetta"]],
-        [63, ["🌧️", "Sadetta"]],
-        [65, ["🌧️", "Sadetta, runsasta"]],
-        [71, ["🌨️", "Lumisadetta"]],
-        [73, ["🌨️", "Lumisadetta"]],
-        [75, ["🌨️", "Lumisadetta, runsasta"]],
-        [80, ["🌦️", "Sadekuuroja"]],
-        [81, ["🌦️", "Sadekuuroja"]],
-        [82, ["⛈️", "Voimakkaita kuuroja"]],
-        [95, ["⛈️", "Ukkosta"]],
-        [96, ["⛈️", "Ukkosta (raetta)"]],
-        [99, ["⛈️", "Ukkosta (raetta)"]],
-      ]);
-      return map.get(code) ?? ["🌡️", `Sääkoodi ${code}`];
-    }
-
-    async function fetchWeather(){
-      wxStatus.textContent = "päivitetään…";
-      const cards = [];
-
-      try{
-        const reqs = CITIES.map(async (c) => {
-          const url = new URL("https://api.open-meteo.com/v1/forecast");
-          url.searchParams.set("latitude", c.lat);
-          url.searchParams.set("longitude", c.lon);
-          url.searchParams.set("current", "temperature_2m,wind_speed_10m,weather_code");
-          url.searchParams.set("timezone", "auto");
-          url.searchParams.set("temperature_unit", "celsius");
-          url.searchParams.set("wind_speed_unit", "m/s");
-          const r = await fetch(url.toString(), { cache: "no-store" });
-          if(!r.ok) throw new Error(`Weather ${c.name}: HTTP ${r.status}`);
-          const j = await r.json();
-          const cur = j.current;
-          const [ico, text] = weatherCodeToText(cur.weather_code);
-          return {
-            name: c.name,
-            temp: cur.temperature_2m,
-            wind: cur.wind_speed_10m,
-            code: cur.weather_code,
-            ico, text
-          };
-        });
-
-        const results = await Promise.all(reqs);
-
-        weatherGrid.innerHTML = "";
-        for(const w of results){
-          const el = document.createElement("div");
-          el.className = "wx";
-          el.innerHTML = `
-            <div class="left">
-              <div class="city">${w.name}</div>
-              <div class="desc">${w.text} • tuuli ${Math.round(w.wind)} m/s</div>
-            </div>
-            <div style="display:flex; align-items:center; gap:10px">
-              <div class="right">
-                <div class="temp">${Math.round(w.temp)}°C</div>
-                <div class="meta2">nyt</div>
-              </div>
-              <div class="ico" aria-hidden="true">${w.ico}</div>
-            </div>
-          `;
-          weatherGrid.appendChild(el);
-        }
-
-        wxStatus.textContent = "ok";
-        stampUpdate();
-        setOnlineState(navigator.onLine);
-      }catch(e){
-        console.error(e);
-        wxStatus.textContent = "virhe";
-        weatherGrid.innerHTML = `
-          <div class="wx" style="grid-column:1/-1">
-            <div class="left">
-              <div class="city">Sää ei päivity</div>
-              <div class="desc">Tarkista verkkoyhteys. (${String(e.message || e)})</div>
-            </div>
-            <div class="ico" aria-hidden="true">⚠️</div>
-          </div>
-        `;
-        setOnlineState(false);
-      }
-    }
-
-    // ---------- RSS News ----------
+    // ---------------- RSS NEWS ----------------
     const newsTabs = $("#newsTabs");
     const newsList = $("#newsList");
     const newsQuery = $("#newsQuery");
     const newsCount = $("#newsCount");
     const refreshBtn = $("#refreshBtn");
+    const rssStatus = $("#rssStatus");
 
     let activeSourceKey = "all";
-    let allItems = []; // {title, link, pubDate, sourceName}
+    let allItems = []; // {title, link, pubDate, sourceName, sourceKey}
 
     function mountNewsTabs(){
       newsTabs.innerHTML = "";
@@ -791,7 +697,7 @@
     }
 
     async function fetchRSS(url){
-      // Try direct fetch first; if blocked, fallback to allorigins raw proxy
+      // Try direct fetch; if blocked by CORS, fallback to allorigins raw proxy.
       const direct = async () => {
         const r = await fetch(url, { cache:"no-store" });
         if(!r.ok) throw new Error(`HTTP ${r.status}`);
@@ -804,11 +710,8 @@
         return await r.text();
       };
 
-      try{
-        return await direct();
-      }catch(_){
-        return await viaProxy();
-      }
+      try{ return await direct(); }
+      catch(_){ return await viaProxy(); }
     }
 
     function parseRSS(xmlText){
@@ -841,60 +744,6 @@
       return `${days} pv sitten`;
     }
 
-    async function refreshNews(){
-      rssStatus.textContent = "päivitetään…";
-      refreshBtn.disabled = true;
-
-      const collected = [];
-      try{
-        const tasks = RSS_SOURCES.map(async (s) => {
-          const xml = await fetchRSS(s.url);
-          const items = parseRSS(xml);
-          for(const it of items){
-            collected.push({
-              title: it.title,
-              link: it.link,
-              pubDate: parseDateLoose(it.pubDateRaw),
-              pubDateRaw: it.pubDateRaw,
-              sourceKey: s.key,
-              sourceName: s.name
-            });
-          }
-        });
-
-        await Promise.all(tasks);
-
-        // Sort newest first (unknown dates go last)
-        collected.sort((a,b) => {
-          const ta = a.pubDate ? a.pubDate.getTime() : -Infinity;
-          const tb = b.pubDate ? b.pubDate.getTime() : -Infinity;
-          return tb - ta;
-        });
-
-        allItems = collected;
-        rssStatus.textContent = "ok";
-        renderNews();
-        stampUpdate();
-        setOnlineState(navigator.onLine);
-      }catch(e){
-        console.error(e);
-        rssStatus.textContent = "virhe";
-        newsList.innerHTML = `
-          <li class="item">
-            <div class="bullet" style="background: rgba(248,113,113,.9); box-shadow:0 0 0 4px rgba(248,113,113,.12)"></div>
-            <div>
-              <div style="font-weight:800">RSS ei päivity</div>
-              <div class="meta">Tarkista verkkoyhteys tai kokeile hetken päästä. (${String(e.message||e)})</div>
-            </div>
-          </li>
-        `;
-        newsCount.textContent = "0 kpl";
-        setOnlineState(false);
-      }finally{
-        refreshBtn.disabled = false;
-      }
-    }
-
     function renderNews(){
       const q = (newsQuery.value || "").trim().toLowerCase();
       const filtered = allItems.filter(it => {
@@ -916,7 +765,7 @@
           <div class="bullet"></div>
           <div style="min-width:0">
             <a href="${it.link}" target="_blank" rel="noopener noreferrer">${it.title}</a>
-            <div class="meta">
+            <div class="meta2">
               <span>${it.sourceName}</span>
               <span>•</span>
               <span>${metaLeft}</span>
@@ -925,34 +774,83 @@
         `;
         newsList.appendChild(li);
       }
-
       newsCount.textContent = `${filtered.length} kpl`;
     }
 
-    // ---------- Init ----------
+    async function refreshNews(){
+      rssStatus.textContent = "päivitetään…";
+      refreshBtn.disabled = true;
+
+      const collected = [];
+      try{
+        await Promise.all(RSS_SOURCES.map(async (s) => {
+          const xml = await fetchRSS(s.url);
+          const items = parseRSS(xml);
+          for(const it of items){
+            collected.push({
+              title: it.title,
+              link: it.link,
+              pubDate: parseDateLoose(it.pubDateRaw),
+              pubDateRaw: it.pubDateRaw,
+              sourceKey: s.key,
+              sourceName: s.name
+            });
+          }
+        }));
+
+        // Newest first; unknown dates last
+        collected.sort((a,b) => {
+          const ta = a.pubDate ? a.pubDate.getTime() : -Infinity;
+          const tb = b.pubDate ? b.pubDate.getTime() : -Infinity;
+          return tb - ta;
+        });
+
+        allItems = collected;
+        rssStatus.textContent = "ok";
+        renderNews();
+        stampUpdate();
+        setOnlineState(navigator.onLine);
+      }catch(e){
+        console.error(e);
+        rssStatus.textContent = "virhe";
+        newsList.innerHTML = `
+          <li class="item">
+            <div class="bullet" style="background: rgba(248,113,113,.9); box-shadow:0 0 0 4px rgba(248,113,113,.12)"></div>
+            <div>
+              <div style="font-weight:800">RSS ei päivity</div>
+              <div class="meta2">Tarkista verkkoyhteys tai kokeile hetken päästä. (${String(e.message||e)})</div>
+            </div>
+          </li>
+        `;
+        newsCount.textContent = "0 kpl";
+        setOnlineState(false);
+      }finally{
+        refreshBtn.disabled = false;
+      }
+    }
+
+    // ---------------- INIT ----------------
     function init(){
       setOnlineState(navigator.onLine);
       window.addEventListener("online", () => setOnlineState(true));
       window.addEventListener("offline", () => setOnlineState(false));
+
+      // Time pills
+      $("#nowLocal").textContent = fmtTime(new Date(), "Europe/Helsinki");
+      stampUpdate();
 
       mountTV();
       mountClocks();
 
       mountNewsTabs();
       refreshNews();
-      fetchWeather();
 
-      // refresh loops
-      setInterval(fetchWeather, WEATHER_REFRESH_MS);
       setInterval(refreshNews, NEWS_REFRESH_MS);
 
       newsQuery.addEventListener("input", () => renderNews());
       refreshBtn.addEventListener("click", () => refreshNews());
-
-      stampUpdate();
     }
 
-    // kick off after TradingView script is ready
     if(document.readyState === "loading"){
       document.addEventListener("DOMContentLoaded", init);
     }else{
