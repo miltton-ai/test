@@ -364,6 +364,70 @@
             color: var(--text-secondary);
         }
 
+        /* Mobile Controls */
+        .mobile-controls {
+            display: none;
+            margin-top: 1rem;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-controls {
+                display: flex;
+                flex-direction: column;
+            }
+        }
+
+        .controls-row {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+
+        .control-btn {
+            width: 60px;
+            height: 60px;
+            background: var(--bg-card);
+            border: 2px solid var(--accent-blue);
+            border-radius: 0.75rem;
+            color: var(--accent-blue);
+            font-size: 1.5rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+        }
+
+        .control-btn:active {
+            transform: scale(0.95);
+            background: var(--accent-blue);
+            color: var(--bg-darker);
+            box-shadow: 0 2px 10px rgba(0, 212, 255, 0.5);
+        }
+
+        .desktop-only {
+            display: inline;
+        }
+
+        .mobile-only {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .desktop-only {
+                display: none;
+            }
+            .mobile-only {
+                display: inline;
+            }
+        }
+
         .loading {
             text-align: center;
             padding: 2rem;
@@ -474,7 +538,18 @@
             </div>
             <canvas id="gameCanvas" class="game-canvas"></canvas>
             <div class="game-instructions">
-                Käytä nuolinäppäimiä (↑ ↓ ← →) ohjataksesi Finnair-konetta syömään SAS-palloja!
+                <span class="desktop-only">Käytä nuolinäppäimiä (↑ ↓ ← →) ohjataksesi Finnair-konetta syömään SAS-palloja!</span>
+                <span class="mobile-only">Käytä alla olevia painikkeita ohjataksesi Finnair-konetta syömään SAS-palloja!</span>
+            </div>
+            <div class="mobile-controls">
+                <div class="controls-row">
+                    <button class="control-btn" id="btn-up">↑</button>
+                </div>
+                <div class="controls-row">
+                    <button class="control-btn" id="btn-left">←</button>
+                    <button class="control-btn" id="btn-down">↓</button>
+                    <button class="control-btn" id="btn-right">→</button>
+                </div>
             </div>
         </div>
     </div>
@@ -663,6 +738,69 @@
             keys[e.key] = false;
         });
 
+        // Mobile touch controls
+        function setupMobileControls() {
+            const btnUp = document.getElementById('btn-up');
+            const btnDown = document.getElementById('btn-down');
+            const btnLeft = document.getElementById('btn-left');
+            const btnRight = document.getElementById('btn-right');
+
+            // Helper function to simulate key press
+            function simulateKey(key, isPressed) {
+                keys[key] = isPressed;
+            }
+
+            // Touch start events
+            btnUp.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                simulateKey('ArrowUp', true);
+            });
+            btnUp.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                simulateKey('ArrowUp', false);
+            });
+
+            btnDown.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                simulateKey('ArrowDown', true);
+            });
+            btnDown.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                simulateKey('ArrowDown', false);
+            });
+
+            btnLeft.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                simulateKey('ArrowLeft', true);
+            });
+            btnLeft.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                simulateKey('ArrowLeft', false);
+            });
+
+            btnRight.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                simulateKey('ArrowRight', true);
+            });
+            btnRight.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                simulateKey('ArrowRight', false);
+            });
+
+            // Also support mouse events for testing
+            btnUp.addEventListener('mousedown', () => simulateKey('ArrowUp', true));
+            btnUp.addEventListener('mouseup', () => simulateKey('ArrowUp', false));
+            
+            btnDown.addEventListener('mousedown', () => simulateKey('ArrowDown', true));
+            btnDown.addEventListener('mouseup', () => simulateKey('ArrowDown', false));
+            
+            btnLeft.addEventListener('mousedown', () => simulateKey('ArrowLeft', true));
+            btnLeft.addEventListener('mouseup', () => simulateKey('ArrowLeft', false));
+            
+            btnRight.addEventListener('mousedown', () => simulateKey('ArrowRight', true));
+            btnRight.addEventListener('mouseup', () => simulateKey('ArrowRight', false));
+        }
+
         // Update game
         function update() {
             // Move player
@@ -797,6 +935,7 @@
             updateClocks();
             fetchNews();
             initDots();
+            setupMobileControls();
             gameLoop();
             
             // Update clocks every second
