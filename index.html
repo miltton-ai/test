@@ -1,1 +1,513 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Elintarvikemarkkinat — Johtajan näkymä</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1117; --surface: #161b22; --surface2: #1c2330;
+    --border: #2a3444; --accent: #c8a45a; --accent2: #4caf7d;
+    --accent3: #e05a5a; --text: #e8dcc8; --text-muted: #7a8694; --text-dim: #4a5568;
+    --font-display: 'Playfair Display', Georgia, serif;
+    --font-body: 'DM Sans', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font-body); min-height: 100vh; overflow-x: hidden; }
+  body::before {
+    content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 1000; opacity: 0.3;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+  }
+  header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(13,17,23,0.94); backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border); padding: 14px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .header-left h1 { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; color: var(--accent); }
+  .header-left .subtitle { font-size: 0.66rem; color: var(--text-muted); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 2px; }
+  .header-right { display: flex; align-items: center; gap: 10px; }
+  .live-badge {
+    display: flex; align-items: center; gap: 5px;
+    background: rgba(76,175,125,0.12); border: 1px solid rgba(76,175,125,0.3);
+    border-radius: 20px; padding: 4px 10px; font-size: 0.65rem; color: var(--accent2);
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent2); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.8)} }
+  .tabs {
+    display: flex; background: var(--surface); border-bottom: 1px solid var(--border);
+    overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab {
+    flex-shrink: 0; padding: 13px 20px; font-size: 0.78rem; font-weight: 500;
+    color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent;
+    transition: all 0.2s; letter-spacing: 0.04em; white-space: nowrap;
+  }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  main { padding: 16px; max-width: 600px; margin: 0 auto; }
+  .section-title {
+    font-family: var(--font-display); font-size: 0.7rem; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--text-muted); margin: 20px 0 12px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .price-scroll { display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none; padding-bottom: 4px; -webkit-overflow-scrolling: touch; }
+  .price-scroll::-webkit-scrollbar { display: none; }
+  .price-card {
+    flex-shrink: 0; width: 130px; background: var(--surface);
+    border: 1px solid var(--border); border-radius: 14px; padding: 14px;
+    position: relative; overflow: hidden; transition: transform 0.15s; cursor: pointer;
+  }
+  .price-card:active { transform: scale(0.97); }
+  .price-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:var(--card-accent,var(--accent)); }
+  .price-card .commodity { font-size:.65rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:.1em; margin-bottom:6px; }
+  .price-card .price { font-family:var(--font-display); font-size:1.4rem; font-weight:700; color:var(--text); line-height:1; }
+  .price-card .unit { font-size:.62rem; color:var(--text-muted); margin-top:2px; }
+  .price-card .change { display:inline-flex; align-items:center; gap:3px; font-size:.7rem; font-weight:500; margin-top:8px; padding:2px 7px; border-radius:10px; }
+  .change.up { background:rgba(76,175,125,.15); color:var(--accent2); }
+  .change.down { background:rgba(224,90,90,.15); color:var(--accent3); }
+  .sparkline { margin-top:10px; }
+  .news-item {
+    background:var(--surface); border:1px solid var(--border); border-radius:14px;
+    padding:16px; margin-bottom:10px; display:flex; gap:12px; cursor:pointer;
+    transition:border-color .2s, transform .15s; text-decoration:none; color:inherit;
+  }
+  .news-item:active { transform:scale(.99); border-color:var(--accent); }
+  .news-source-badge {
+    flex-shrink:0; width:36px; height:36px; border-radius:10px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:.6rem; font-weight:700; letter-spacing:.05em; text-align:center; line-height:1.2;
+  }
+  .news-content .news-title { font-size:.85rem; font-weight:500; color:var(--text); line-height:1.35; margin-bottom:5px; }
+  .news-meta { display:flex; align-items:center; gap:8px; font-size:.65rem; color:var(--text-muted); flex-wrap:wrap; }
+  .news-tag { padding:2px 7px; border-radius:8px; font-size:.6rem; font-weight:500; letter-spacing:.05em; }
+  .weather-strip {
+    background:var(--surface); border:1px solid var(--border); border-radius:14px;
+    padding:14px 16px; display:flex; align-items:center; gap:14px; margin-bottom:10px;
+  }
+  .weather-icon { font-size:2rem; }
+  .weather-info .location { font-size:.65rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:.1em; }
+  .weather-info .temp { font-family:var(--font-display); font-size:1.5rem; font-weight:700; color:var(--text); line-height:1; }
+  .weather-desc { font-size:.72rem; color:var(--text-muted); margin-top:1px; }
+  .weather-details { margin-left:auto; text-align:right; }
+  .weather-detail-item { font-size:.68rem; color:var(--text-muted); margin-bottom:2px; }
+  .weather-detail-item span { color:var(--text); font-weight:500; }
+  .chart-container { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:16px; margin-bottom:10px; }
+  .chart-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px; }
+  .chart-title { font-family:var(--font-display); font-size:.95rem; color:var(--text); }
+  .chart-subtitle { font-size:.65rem; color:var(--text-muted); margin-top:2px; }
+  .period-pills { display:flex; gap:4px; }
+  .period-pill { padding:4px 9px; border-radius:8px; font-size:.62rem; font-weight:500; cursor:pointer; transition:all .15s; border:1px solid var(--border); color:var(--text-muted); }
+  .period-pill.active { background:var(--accent); border-color:var(--accent); color:#0d1117; }
+  canvas { width:100% !important; }
+  .alert-card { background:rgba(224,90,90,.08); border:1px solid rgba(224,90,90,.25); border-radius:14px; padding:14px 16px; margin-bottom:10px; display:flex; gap:12px; align-items:flex-start; }
+  .alert-icon { font-size:1.2rem; flex-shrink:0; margin-top:1px; }
+  .alert-text .alert-title { font-size:.82rem; font-weight:500; color:var(--accent3); margin-bottom:3px; }
+  .alert-text .alert-body { font-size:.72rem; color:var(--text-muted); line-height:1.4; }
+  .status-bar { background:var(--surface2); border-radius:10px; padding:8px 12px; font-size:.65rem; color:var(--text-dim); display:flex; align-items:center; gap:6px; margin-bottom:16px; }
+  .page { display:none; }
+  .page.active { display:block; }
+  .refresh-btn { background:none; border:1px solid var(--border); color:var(--text-muted); border-radius:10px; padding:6px 10px; font-size:.7rem; cursor:pointer; display:flex; align-items:center; gap:5px; font-family:var(--font-body); transition:all .2s; }
+  .refresh-btn:active { border-color:var(--accent); color:var(--accent); }
+  .spin { animation:spin 1s linear infinite; display:inline-block; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+  .animate-in { animation:fadeUp .4s ease forwards; opacity:0; }
+  .delay-1{animation-delay:.05s} .delay-2{animation-delay:.1s} .delay-3{animation-delay:.15s} .delay-4{animation-delay:.2s} .delay-5{animation-delay:.25s}
+  .ai-loading { display:flex; align-items:center; gap:10px; padding:20px; color:var(--text-muted); font-size:.8rem; }
+  .ai-dots span { display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--accent); margin:0 2px; animation:bounce .8s infinite; }
+  .ai-dots span:nth-child(2){animation-delay:.15s} .ai-dots span:nth-child(3){animation-delay:.3s}
+  @keyframes bounce { 0%,80%,100%{transform:scale(0.6);opacity:.4} 40%{transform:scale(1);opacity:1} }
+</style>
+</head>
+<body>
 
+<header>
+  <div class="header-left">
+    <h1>Elintarvikemarkkinat</h1>
+    <div class="subtitle">Johtajan näkymä · Suomi</div>
+  </div>
+  <div class="header-right">
+    <button class="refresh-btn" onclick="refreshCurrent()" id="refreshBtn">
+      <span id="refreshIcon">↻</span> Päivitä
+    </button>
+    <div class="live-badge"><div class="live-dot"></div>Live</div>
+  </div>
+</header>
+
+<div class="tabs">
+  <div class="tab active" onclick="showTab('hinnat',this)">Hinnat</div>
+  <div class="tab" onclick="showTab('uutiset',this)">Uutiset</div>
+  <div class="tab" onclick="showTab('saa',this)">Sää &amp; Sato</div>
+  <div class="tab" onclick="showTab('trendit',this)">Trendit</div>
+</div>
+
+<main>
+
+  <!-- HINNAT -->
+  <div class="page active" id="page-hinnat">
+    <div class="status-bar animate-in" id="price-status">📊 Tuottajahinnat Q1/2026 — Tilastokeskus / Luke</div>
+    <div class="section-title animate-in delay-1">Tuottajahinnat — Q1/2026</div>
+    <div class="price-scroll animate-in delay-2" id="priceCards"></div>
+    <div class="section-title animate-in delay-3">Hintakehitys 2024–2026</div>
+    <div class="chart-container animate-in delay-4">
+      <div class="chart-header">
+        <div>
+          <div class="chart-title">Vehnä · Ruis · Ohra</div>
+          <div class="chart-subtitle">Tuottajahinta €/t — Luke / Tilastokeskus</div>
+        </div>
+        <div class="period-pills">
+          <div class="period-pill active" onclick="setPeriod(this,'6kk')">6kk</div>
+          <div class="period-pill" onclick="setPeriod(this,'1v')">1v</div>
+        </div>
+      </div>
+      <canvas id="grainChart" height="160"></canvas>
+    </div>
+    <div class="section-title animate-in delay-5">Hälytyskeskus</div>
+    <div id="alertArea" class="animate-in delay-5"></div>
+  </div>
+
+  <!-- UUTISET -->
+  <div class="page" id="page-uutiset">
+    <div class="status-bar" id="news-status">⏳ Haetaan uutisia Claude AI:lla…</div>
+    <div class="section-title">Alan uutiset — tänään</div>
+    <div id="newsFeed">
+      <div class="ai-loading"><div class="ai-dots"><span></span><span></span><span></span></div> Claude hakee uutisia…</div>
+    </div>
+  </div>
+
+  <!-- SÄÄ -->
+  <div class="page" id="page-saa">
+    <div class="status-bar" id="weather-status">⏳ Claude hakee säätietoja…</div>
+    <div class="section-title">Sää · Kasvualueet nyt</div>
+    <div id="weatherArea">
+      <div class="ai-loading"><div class="ai-dots"><span></span><span></span><span></span></div> Haetaan…</div>
+    </div>
+    <div class="section-title">Satoennuste 2025</div>
+    <div class="chart-container">
+      <div class="chart-header">
+        <div><div class="chart-title">Viljan satoennuste</div><div class="chart-subtitle">milj. kg — Luke.fi</div></div>
+      </div>
+      <canvas id="harvestChart" height="160"></canvas>
+    </div>
+  </div>
+
+  <!-- TRENDIT -->
+  <div class="page" id="page-trendit">
+    <div class="status-bar">📊 ETL &amp; Tulli — vientitilasto</div>
+    <div class="section-title">Elintarvikeviennin arvo</div>
+    <div class="chart-container">
+      <div class="chart-header">
+        <div><div class="chart-title">Vienti milj. €</div><div class="chart-subtitle">ETL / Tulli</div></div>
+      </div>
+      <canvas id="exportChart" height="160"></canvas>
+    </div>
+    <div class="section-title">Kategoriat</div>
+    <div id="categoryCards"></div>
+  </div>
+
+</main>
+
+<script>
+// ─── PRICE DATA Q1/2026 (Tilastokeskus 15.5.2026) ─────────────────
+// Naudanliha +37.9%, maito +7.1%, viljat -12.5%, sianliha -3.5%
+const priceData = [
+  { name:'Vehnä',      price:'15.60', unit:'€/100kg', change:'−12.5%', dir:'down', color:'#c8a45a',
+    spark:[17.8,17.2,16.8,16.3,16.0,15.8,15.6] },
+  { name:'Ruis',       price:'19.20', unit:'€/100kg', change:'−11.8%', dir:'down', color:'#a0785a',
+    spark:[21.8,21.2,20.6,20.1,19.7,19.4,19.2] },
+  { name:'Ohra',       price:'13.70', unit:'€/100kg', change:'−12.2%', dir:'down', color:'#6a8fa0',
+    spark:[15.6,15.1,14.7,14.3,14.0,13.8,13.7] },
+  { name:'Maito',      price:'56.10', unit:'€/100L',  change:'+7.1%',  dir:'up',   color:'#e8e0d0',
+    spark:[52.4,53.0,53.8,54.5,55.0,55.7,56.1] },
+  { name:'Naudanliha', price:'534.0', unit:'€/100kg', change:'+37.9%', dir:'up',   color:'#8b6355',
+    spark:[387,410,440,468,495,515,534] },
+  { name:'Sianliha',   price:'187.5', unit:'€/100kg', change:'−3.5%',  dir:'down', color:'#e07070',
+    spark:[194,193,192,191,190,189,187.5] },
+];
+
+function renderPriceCards() {
+  document.getElementById('priceCards').innerHTML = priceData.map(p=>`
+    <div class="price-card" style="--card-accent:${p.color}">
+      <div class="commodity">${p.name}</div>
+      <div class="price">${p.price}</div>
+      <div class="unit">${p.unit}</div>
+      <div class="change ${p.dir}">${p.dir==='up'?'▲':'▼'} ${p.change}</div>
+      <div class="sparkline">
+        <svg width="98" height="28" viewBox="0 0 98 28">${sparkSVG(p.spark, p.dir==='up'?'#4caf7d':'#e05a5a')}</svg>
+      </div>
+    </div>`).join('');
+}
+
+function sparkSVG(data, color) {
+  const mn=Math.min(...data), mx=Math.max(...data);
+  const pts=data.map((v,i)=>`${2+(i/(data.length-1))*94},${2+(1-(v-mn)/(mx-mn||1))*24}`);
+  const lp=pts[pts.length-1];
+  return `<polyline points="${pts.join(' ')}" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".85"/>
+    <circle cx="${lp.split(',')[0]}" cy="${lp.split(',')[1]}" r="2.5" fill="${color}"/>`;
+}
+
+// ─── CHARTS ───────────────────────────────────────────────────────
+function drawLineChart(ctx, labels, datasets) {
+  const W=ctx.canvas.parentElement.offsetWidth-32;
+  ctx.canvas.width=W;
+  const H=160,pl=30,pr=10,pt=10,pb=30,cw=W-pl-pr,ch=H-pt-pb;
+  ctx.clearRect(0,0,W,H);
+  ctx.strokeStyle='#2a3444'; ctx.lineWidth=1;
+  for(let i=0;i<=4;i++){const y=pt+(i/4)*ch;ctx.beginPath();ctx.moveTo(pl,y);ctx.lineTo(pl+cw,y);ctx.stroke();}
+  const all=datasets.flatMap(d=>d.data), mn=Math.min(...all)*.98, mx=Math.max(...all)*1.02;
+  datasets.forEach(ds=>{
+    const pts=ds.data.map((v,i)=>({x:pl+(i/(ds.data.length-1))*cw,y:pt+(1-(v-mn)/(mx-mn))*ch}));
+    const grad=ctx.createLinearGradient(0,pt,0,pt+ch);
+    grad.addColorStop(0,ds.color+'33'); grad.addColorStop(1,ds.color+'00');
+    ctx.beginPath(); ctx.moveTo(pts[0].x,pt+ch);
+    pts.forEach(p=>ctx.lineTo(p.x,p.y)); ctx.lineTo(pts[pts.length-1].x,pt+ch);
+    ctx.closePath(); ctx.fillStyle=grad; ctx.fill();
+    ctx.beginPath(); pts.forEach((p,i)=>i===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y));
+    ctx.strokeStyle=ds.color; ctx.lineWidth=2.5; ctx.lineJoin='round'; ctx.stroke();
+    const lp=pts[pts.length-1];
+    ctx.beginPath(); ctx.arc(lp.x,lp.y,3.5,0,Math.PI*2); ctx.fillStyle=ds.color; ctx.fill();
+    ctx.fillStyle=ds.color; ctx.font='500 10px DM Sans'; ctx.textAlign='left';
+    ctx.fillText(ds.label,pl+4,pt+14+(datasets.indexOf(ds)*14));
+  });
+  ctx.fillStyle='#4a5568'; ctx.font='9px DM Sans'; ctx.textAlign='center';
+  labels.forEach((l,i)=>{if(i%2===0){const x=pl+(i/(labels.length-1))*cw;ctx.fillText(l.slice(0,3),x,H-6);}});
+}
+
+function drawGrainChart() {
+  const ctx=document.getElementById('grainChart').getContext('2d');
+  drawLineChart(ctx,['Heinä','Elo','Syys','Loka','Marras','Joulu','Tammi','Helmi','Maalis','Huhti','Touko','Kesä'],[
+    {label:'Vehnä',data:[17.8,17.5,17.2,16.8,16.5,16.3,16.0,15.8,15.7,15.6,15.6,15.5],color:'#c8a45a'},
+    {label:'Ruis', data:[21.8,21.5,21.2,20.8,20.5,20.2,19.8,19.5,19.3,19.2,19.2,19.1],color:'#a0785a'},
+    {label:'Ohra', data:[15.6,15.3,15.1,14.8,14.5,14.3,14.0,13.8,13.7,13.7,13.6,13.5],color:'#6a8fa0'},
+  ]);
+}
+
+function drawHarvestChart() {
+  const ctx=document.getElementById('harvestChart').getContext('2d');
+  const W=ctx.canvas.parentElement.offsetWidth-32; ctx.canvas.width=W;
+  const H=160,labels=['Vehnä','Ruis','Ohra','Kaura','Rypsi'],vals=[834,76,1580,1120,210],
+        colors=['#c8a45a','#a0785a','#6a8fa0','#4caf7d','#e0b060'];
+  const pl=70,pr=10,pt=10,pb=10,cw=W-pl-pr,ch=H-pt-pb,max=Math.max(...vals),bh=ch/(labels.length*1.4);
+  ctx.clearRect(0,0,W,H);
+  labels.forEach((l,i)=>{
+    const y=pt+i*(ch/labels.length)+(ch/labels.length-bh)/2, bw=(vals[i]/max)*cw;
+    const grad=ctx.createLinearGradient(pl,0,pl+bw,0);
+    grad.addColorStop(0,colors[i]); grad.addColorStop(1,colors[i]+'55');
+    ctx.fillStyle=grad; ctx.beginPath(); ctx.roundRect(pl,y,bw,bh,4); ctx.fill();
+    ctx.fillStyle='#7a8694'; ctx.font='10px DM Sans'; ctx.textAlign='right'; ctx.fillText(l,pl-6,y+bh/2+4);
+    ctx.fillStyle=colors[i]; ctx.textAlign='left'; ctx.fillText(vals[i]+' Mkg',pl+bw+5,y+bh/2+4);
+  });
+}
+
+function drawExportChart() {
+  const ctx=document.getElementById('exportChart').getContext('2d');
+  drawLineChart(ctx,['2020','2021','2022','2023','2024','2025e'],[
+    {label:'Vienti yht.',data:[1580,1720,1850,1940,2050,2210],color:'#c8a45a'},
+    {label:'EU-vienti', data:[820,900,970,1020,1090,1180],color:'#4caf7d'},
+  ]);
+}
+
+function renderCategoryCards() {
+  const cats=[
+    {name:'Maitotuotteet',share:'28%',trend:'+7.1%',dir:'up',color:'#e8e0d0'},
+    {name:'Naudanlihajal.',share:'22%',trend:'+37.9%',dir:'up',color:'#8b6355'},
+    {name:'Sianlihajal.',share:'18%',trend:'−3.5%',dir:'down',color:'#e07070'},
+    {name:'Viljatuotteet',share:'16%',trend:'−12.5%',dir:'down',color:'#c8a45a'},
+    {name:'Juomat',share:'10%',trend:'+3.2%',dir:'up',color:'#6a8fa0'},
+    {name:'Muu',share:'6%',trend:'+1.1%',dir:'up',color:'#8888aa'},
+  ];
+  document.getElementById('categoryCards').innerHTML=cats.map(c=>`
+    <div class="chart-container" style="margin-bottom:8px;padding:12px 16px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:10px;height:10px;border-radius:50%;background:${c.color};flex-shrink:0;"></div>
+          <span style="font-size:.85rem;font-weight:500">${c.name}</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="font-size:.75rem;color:var(--text-muted)">${c.share}</span>
+          <span style="font-size:.72rem;padding:2px 8px;border-radius:8px;
+            background:${c.dir==='up'?'rgba(76,175,125,0.15)':'rgba(224,90,90,0.15)'};
+            color:${c.dir==='up'?'#4caf7d':'#e05a5a'}">${c.trend}</span>
+        </div>
+      </div>
+      <div style="margin-top:8px;height:4px;background:var(--border);border-radius:2px;overflow:hidden;">
+        <div style="height:100%;width:${c.share};background:${c.color};border-radius:2px;transition:width .8s ease;"></div>
+      </div>
+    </div>`).join('');
+}
+
+function renderAlerts() {
+  document.getElementById('alertArea').innerHTML=`
+    <div class="alert-card">
+      <div class="alert-icon">📉</div>
+      <div class="alert-text">
+        <div class="alert-title">Viljojen hinnat laskeneet −12,5 % vuodessa</div>
+        <div class="alert-body">Q1/2026: Vehnä ja kaura kovimmat laskijat. Kotimainen hintakehitys seuraa maailmanmarkkinoita. Lähde: Tilastokeskus 15.5.2026.</div>
+      </div>
+    </div>
+    <div class="alert-card" style="background:rgba(76,175,125,.08);border-color:rgba(76,175,125,.25);">
+      <div class="alert-icon">📈</div>
+      <div class="alert-text">
+        <div class="alert-title" style="color:var(--accent2)">Naudanliha +37,9 % — historiallinen nousu</div>
+        <div class="alert-body">Tuottajahinta nousi merkittävästi Q1/2026. Maito +7,1 %. Kotieläintuotteiden tuottajahinnat vahvistuneet. Lähde: Tilastokeskus 15.5.2026.</div>
+      </div>
+    </div>`;
+}
+
+// ─── AI-POWERED NEWS (Claude + web_search) ────────────────────────
+async function loadNews() {
+  const feed = document.getElementById('newsFeed');
+  const status = document.getElementById('news-status');
+  feed.innerHTML = '<div class="ai-loading"><div class="ai-dots"><span></span><span></span><span></span></div> Claude hakee tämän päivän uutisia…</div>';
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        tools: [{ type: 'web_search_20250305', name: 'web_search' }],
+        messages: [{
+          role: 'user',
+          content: `Hae tänään tai tällä viikolla julkaistuja uutisia suomalaisesta elintarvike- ja maatalousalasta.
+Etsi uutisia lähteistä kuten maaseuduntulevaisuus.fi, luke.fi, ruokavirasto.fi, etl.fi tai muista alan lähteistä.
+Palauta VAIN JSON-taulukko, ei muuta tekstiä:
+[{"title":"otsikko","source":"MT/LUKE/RV/ETL/MUU","url":"https://...","time":"X t sitten","tag":"Markkinat/Säädökset/Tutkimus/Vienti/Hinnat"}]
+Max 8 uutista. Oikeat URL-osoitteet, ei keksittyjä.`
+        }]
+      })
+    });
+
+    const data = await resp.json();
+    // Kerää kaikki teksti content-blockeista
+    const text = (data.content || []).filter(b => b.type === 'text').map(b => b.text).join('');
+    // Etsi JSON-taulukko vastauksesta
+    const match = text.match(/\[[\s\S]*\]/);
+    if (!match) throw new Error('Ei JSON-vastausta');
+    const items = JSON.parse(match[0]);
+
+    const sourceStyles = {
+      'MT':   {color:'#1a6b3a', bg:'rgba(26,107,58,0.15)'},
+      'LUKE': {color:'#2d7d46', bg:'rgba(45,125,70,0.15)'},
+      'RV':   {color:'#0066cc', bg:'rgba(0,102,204,0.12)'},
+      'ETL':  {color:'#8b4513', bg:'rgba(139,69,19,0.15)'},
+      'MUU':  {color:'#7a8694', bg:'rgba(122,134,148,0.12)'},
+    };
+    const tagStyles = {
+      'Markkinat':  {bg:'rgba(200,164,90,0.15)',  text:'#c8a45a'},
+      'Säädökset':  {bg:'rgba(224,90,90,0.15)',   text:'#e05a5a'},
+      'Tutkimus':   {bg:'rgba(76,175,125,0.15)',  text:'#4caf7d'},
+      'Vienti':     {bg:'rgba(76,175,125,0.15)',  text:'#4caf7d'},
+      'Hinnat':     {bg:'rgba(160,120,90,0.15)',  text:'#a0785a'},
+    };
+
+    feed.innerHTML = items.map(n => {
+      const s = sourceStyles[n.source] || sourceStyles['MUU'];
+      const t = tagStyles[n.tag]       || {bg:'rgba(122,134,148,0.12)', text:'#7a8694'};
+      return `<a class="news-item" href="${n.url}" target="_blank" rel="noopener">
+        <div class="news-source-badge" style="color:${s.color};background:${s.bg}">${n.source}</div>
+        <div class="news-content">
+          <div class="news-title">${n.title}</div>
+          <div class="news-meta">
+            <span>${n.time || ''}</span>
+            <span class="news-tag" style="background:${t.bg};color:${t.text}">${n.tag}</span>
+          </div>
+        </div>
+      </a>`;
+    }).join('');
+
+    status.textContent = `✓ ${items.length} uutista haettu · ${new Date().toLocaleTimeString('fi-FI',{hour:'2-digit',minute:'2-digit'})}`;
+  } catch(e) {
+    feed.innerHTML = '<div style="padding:16px;color:var(--text-muted);font-size:.8rem;">⚠ Uutisten haku epäonnistui. Tarkista yhteys.</div>';
+    status.textContent = '⚠ Haku epäonnistui: ' + e.message;
+  }
+}
+
+// ─── AI-POWERED WEATHER (Claude + web_search) ─────────────────────
+async function loadWeather() {
+  const area = document.getElementById('weatherArea');
+  const status = document.getElementById('weather-status');
+  area.innerHTML = '<div class="ai-loading"><div class="ai-dots"><span></span><span></span><span></span></div> Claude hakee säätietoja…</div>';
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 600,
+        tools: [{ type: 'web_search_20250305', name: 'web_search' }],
+        messages: [{
+          role: 'user',
+          content: `Hae tämänhetkinen sää näissä suomalaisissa kaupungeissa: Helsinki, Tampere, Oulu, Joensuu.
+Palauta VAIN JSON-taulukko, ei muuta tekstiä:
+[{"city":"Helsinki","temp":"X°C","wind":"X m/s","humidity":"X%","desc":"Selkeää/Pilvistä/Sadetta/Puolipilvistä","icon":"☀️/⛅/🌧/❄️/☁️"}]`
+        }]
+      })
+    });
+
+    const data = await resp.json();
+    const text = (data.content || []).filter(b => b.type === 'text').map(b => b.text).join('');
+    const match = text.match(/\[[\s\S]*\]/);
+    if (!match) throw new Error('Ei vastausta');
+    const cities = JSON.parse(match[0]);
+
+    area.innerHTML = cities.map(c => `
+      <div class="weather-strip">
+        <div class="weather-icon">${c.icon || '🌡'}</div>
+        <div class="weather-info">
+          <div class="location">${c.city}</div>
+          <div class="temp">${c.temp}</div>
+          <div class="weather-desc">${c.desc}</div>
+        </div>
+        <div class="weather-details">
+          <div class="weather-detail-item">Tuuli <span>${c.wind}</span></div>
+          <div class="weather-detail-item">Kosteus <span>${c.humidity}</span></div>
+        </div>
+      </div>`).join('');
+
+    status.textContent = `✓ Säätiedot haettu · ${new Date().toLocaleTimeString('fi-FI',{hour:'2-digit',minute:'2-digit'})}`;
+  } catch(e) {
+    area.innerHTML = '<div style="padding:16px;color:var(--text-muted);font-size:.8rem;">⚠ Sään haku epäonnistui.</div>';
+    status.textContent = '⚠ Virhe: ' + e.message;
+  }
+}
+
+// ─── TABS ─────────────────────────────────────────────────────────
+let newsLoaded = false, weatherLoaded = false;
+function showTab(name, el) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  if(el) el.classList.add('active');
+  if(name==='uutiset' && !newsLoaded){ newsLoaded=true; loadNews(); }
+  if(name==='saa' && !weatherLoaded){ weatherLoaded=true; loadWeather(); setTimeout(drawHarvestChart,100); }
+  if(name==='trendit'){ setTimeout(()=>{drawExportChart();renderCategoryCards();},100); }
+}
+
+function setPeriod(el){ document.querySelectorAll('.period-pill').forEach(x=>x.classList.remove('active')); el.classList.add('active'); }
+
+function refreshCurrent() {
+  const icon = document.getElementById('refreshIcon');
+  icon.classList.add('spin');
+  const tab = document.querySelector('.tab.active')?.textContent?.trim();
+  if(tab==='Uutiset'){ newsLoaded=false; loadNews(); }
+  if(tab==='Sää & Sato'){ weatherLoaded=false; loadWeather(); }
+  setTimeout(()=>icon.classList.remove('spin'), 1500);
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────
+window.addEventListener('load', ()=>{
+  renderPriceCards();
+  renderAlerts();
+  setTimeout(drawGrainChart, 200);
+});
+window.addEventListener('resize', drawGrainChart);
+</script>
+</body>
+</html>
