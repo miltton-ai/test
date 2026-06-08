@@ -662,6 +662,634 @@ loadTab('hinnat');
 </script>
 </body>
 </html>
+  .brand h1 span{color:var(--gold)}
+  .brand .sub{font-size:11px;color:var(--muted);margin-top:2px;letter-spacing:.04em;text-transform:uppercase}
+  .pulse{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:rgba(63,185,80,.1);border:1px solid rgba(63,185,80,.3);font-size:11px;color:#7ee787;font-weight:600;letter-spacing:.04em}
+  .pulse-dot{width:6px;height:6px;border-radius:50%;background:#3fb950;box-shadow:0 0 0 0 rgba(63,185,80,.7);animation:pulse 2s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(63,185,80,.7)}70%{box-shadow:0 0 0 10px rgba(63,185,80,0)}100%{box-shadow:0 0 0 0 rgba(63,185,80,0)}}
+  .refresh{min-width:44px;min-height:44px;border-radius:12px;background:var(--bg-3);border:1px solid var(--border);display:inline-flex;align-items:center;justify-content:center;color:var(--gold)}
+  .refresh:active{transform:scale(.94)}
+  .refresh.spin svg{animation:spin .8s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* Tabs */
+  .tabs{display:flex;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--border);padding:0 8px;gap:2px}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{flex:0 0 auto;min-height:48px;padding:0 16px;font-size:14px;font-weight:600;color:var(--muted);position:relative;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+  .tab.active{color:var(--gold)}
+  .tab.active::after{content:'';position:absolute;left:8px;right:8px;bottom:-1px;height:2px;background:var(--gold);border-radius:2px 2px 0 0}
+
+  /* Layout */
+  main{padding:18px 0 40px}
+  .pane{display:none;animation:fade .4s ease both}
+  .pane.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .section-title{display:flex;align-items:baseline;justify-content:space-between;padding:0 16px;margin:18px 0 10px}
+  .section-title h2{font-size:18px}
+  .section-title .meta{font-size:11px;color:var(--muted);letter-spacing:.05em;text-transform:uppercase}
+
+  /* Price cards */
+  .scroller{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 16px 14px;scrollbar-width:none}
+  .scroller::-webkit-scrollbar{display:none}
+  .pcard{flex:0 0 78%;max-width:280px;scroll-snap-align:start;background:linear-gradient(160deg,var(--bg-2),var(--bg-3));border:1px solid var(--border);border-radius:var(--radius);padding:16px;position:relative;overflow:hidden}
+  .pcard::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent,rgba(200,164,90,.04));pointer-events:none}
+  .pcard .name{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .pcard .price{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;margin-top:6px;color:var(--gold)}
+  .pcard .unit{font-size:12px;color:var(--muted);margin-left:4px;font-family:'DM Sans'}
+  .pcard .delta{display:inline-flex;align-items:center;gap:4px;margin-top:10px;font-size:13px;font-weight:600;padding:4px 9px;border-radius:999px}
+  .delta.up{color:var(--up);background:rgba(63,185,80,.12)}
+  .delta.down{color:var(--down);background:rgba(248,81,73,.12)}
+  .spark{margin-top:14px;width:100%;height:46px;display:block}
+
+  /* Chart box */
+  .chartbox{margin:0 16px;background:var(--bg-2);border:1px solid var(--border);border-radius:var(--radius);padding:16px}
+  .chartbox h3{font-size:15px;margin-bottom:4px;font-family:'DM Sans';font-weight:600}
+  .chartbox .csub{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px}
+  canvas{width:100%;display:block}
+
+  /* Alerts */
+  .alerts{display:grid;gap:10px;padding:14px 16px 0}
+  .alert{display:flex;gap:12px;padding:14px;border-radius:var(--radius);border:1px solid;align-items:flex-start}
+  .alert.r{border-color:rgba(248,81,73,.35);background:rgba(248,81,73,.07)}
+  .alert.g{border-color:rgba(63,185,80,.35);background:rgba(63,185,80,.07)}
+  .alert .ico{font-size:20px;line-height:1}
+  .alert h4{font-family:'DM Sans';font-size:14px;font-weight:700;margin-bottom:3px}
+  .alert p{margin:0;font-size:13px;color:var(--muted)}
+
+  /* News */
+  .news{padding:4px 16px 0;display:grid;gap:10px}
+  .news-item{display:block;background:var(--bg-2);border:1px solid var(--border);border-radius:var(--radius);padding:14px;transition:border-color .2s}
+  .news-item:active{border-color:var(--gold-dim)}
+  .news-top{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+  .badge{font-size:10px;font-weight:700;letter-spacing:.08em;padding:3px 7px;border-radius:5px;color:#0d1117}
+  .b-MT{background:#7fb069}
+  .b-EFSA{background:#5bb4d8}
+  .b-ESTAT{background:#f6c177}
+  .b-EP{background:#c89bd1}
+  .b-COU{background:#e8a157}
+  .b-BEUC{background:#9bd1b3}
+  .b-FSN{background:#e88aab}
+  .pill{font-size:11px;color:var(--muted);border:1px solid var(--border);padding:2px 8px;border-radius:999px}
+  .time{font-size:11px;color:var(--muted);margin-left:auto}
+  .news-item h4{font-family:'DM Sans';font-size:14px;font-weight:600;line-height:1.35}
+
+  /* Loading / error */
+  .loading{display:flex;justify-content:center;align-items:center;padding:50px 16px;color:var(--muted);gap:10px}
+  .spinner{width:22px;height:22px;border:2px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite}
+  .errmsg{margin:14px 16px;padding:14px;border-radius:var(--radius);border:1px solid rgba(248,81,73,.35);background:rgba(248,81,73,.07);color:#ffb4b0;font-size:13px}
+
+  /* Weather */
+  .weather{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:4px 16px 0}
+  .wcard{background:var(--bg-2);border:1px solid var(--border);border-radius:var(--radius);padding:14px}
+  .wcard .city{font-family:'Playfair Display',serif;font-size:16px;font-weight:700}
+  .wcard .icon{font-size:32px;margin:6px 0}
+  .wcard .temp{font-size:22px;font-weight:700;color:var(--gold);font-family:'Playfair Display'}
+  .wcard .desc{font-size:12px;color:var(--muted);margin:4px 0 8px}
+  .wcard .meta-row{font-size:11px;color:var(--muted);display:flex;justify-content:space-between;border-top:1px solid var(--border);padding-top:8px;margin-top:6px}
+
+  /* Trend categories */
+  .cats{padding:4px 16px 0;display:grid;gap:10px}
+  .cat{background:var(--bg-2);border:1px solid var(--border);border-radius:var(--radius);padding:14px}
+  .cat-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+  .cat-name{font-weight:600;font-size:14px}
+  .cat-val{font-weight:700;font-size:14px}
+  .cat-val.up{color:var(--up)}
+  .cat-val.down{color:var(--down)}
+  .bar{height:6px;background:var(--bg-3);border-radius:3px;overflow:hidden;position:relative}
+  .bar > i{display:block;height:100%;border-radius:3px}
+  .bar > i.up{background:linear-gradient(90deg,var(--up),#7ee787)}
+  .bar > i.down{background:linear-gradient(90deg,var(--down),#ff7b72)}
+
+  .footer{padding:24px 16px;text-align:center;color:var(--muted);font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+  .explain{margin:-2px 16px 12px;padding:12px 14px;font-size:13px;color:var(--muted);line-height:1.5;background:var(--bg-2);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:10px}
+  .explain strong{color:var(--text);font-weight:600}
+
+  @media (min-width: 720px){
+    .pcard{flex:0 0 280px}
+    .weather{grid-template-columns:repeat(4,1fr)}
+    main{max-width:920px;margin:0 auto}
+    .hdr-inner{max-width:920px;margin:0 auto}
+    .tabs{max-width:920px;margin:0 auto}
+  }
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-inner">
+    <div class="brand">
+      <h1>Elintarvike<span>markkinat</span></h1>
+      <div class="sub">Johtajan näkymä</div>
+    </div>
+    <span class="pulse"><span class="pulse-dot"></span>LIVE</span>
+    <button class="refresh" id="refreshBtn" aria-label="Päivitä">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><polyline points="21 3 21 9 15 9"/></svg>
+    </button>
+  </div>
+  <nav class="tabs" id="tabs">
+    <button class="tab active" data-tab="hinnat">Hinnat</button>
+    <button class="tab" data-tab="uutiset">Uutiset</button>
+    <button class="tab" data-tab="saa">Sää &amp; Sato</button>
+    <button class="tab" data-tab="trendit">Trendit</button>
+  </nav>
+</header>
+
+<main>
+  <!-- HINNAT -->
+  <section class="pane active" id="pane-hinnat">
+    <div class="section-title">
+      <h2>Tuottajahinnat</h2>
+      <span class="meta">Q1 / 2026 · Tilastokeskus 15.5.2026</span>
+    </div>
+    <div class="scroller" id="priceScroller"></div>
+
+    <div class="chartbox">
+      <h3>Viljojen hintakehitys</h3>
+      <div class="csub">12 kk · €/100 kg</div>
+      <canvas id="grainChart" height="220"></canvas>
+    </div>
+
+    <div class="alerts">
+      <div class="alert r">
+        <span class="ico">⚠️</span>
+        <div>
+          <h4>Viljat laskussa −12,5 %</h4>
+          <p>Vehnän, rukiin ja ohran tuottajahinnat romahtaneet vuositasolla. Tarjonta runsasta, varastot täynnä.</p>
+        </div>
+      </div>
+      <div class="alert g">
+        <span class="ico">📈</span>
+        <div>
+          <h4>Naudanliha +37,9 %</h4>
+          <p>Historiallinen hinnannousu. Kysyntä Euroopassa kasvanut, kotimainen tarjonta tiukentunut.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- UUTISET -->
+  <section class="pane" id="pane-uutiset">
+    <div class="section-title">
+      <h2>Toimialan uutiset</h2>
+      <span class="meta">4 lähdettä · live</span>
+    </div>
+    <div id="newsBody"></div>
+  </section>
+
+  <!-- SÄÄ & SATO -->
+  <section class="pane" id="pane-saa">
+    <div class="section-title">
+      <h2>Sää tuotantoalueilla</h2>
+      <span class="meta">Open-Meteo · live</span>
+    </div>
+    <div id="weatherBody"></div>
+
+    <div class="section-title">
+      <h2>Sato-ennuste 2026</h2>
+      <span class="meta">milj. kg</span>
+    </div>
+    <div class="chartbox">
+      <canvas id="harvestChart" height="240"></canvas>
+    </div>
+  </section>
+
+  <!-- TRENDIT -->
+  <section class="pane" id="pane-trendit">
+    <div class="section-title">
+      <h2>Elintarvikeviennin arvo</h2>
+      <span class="meta">2021 – 2026e · milj. €</span>
+    </div>
+    <div class="chartbox">
+      <canvas id="exportChart" height="240"></canvas>
+      <div style="display:flex;gap:14px;margin-top:10px;font-size:12px;color:var(--muted)">
+        <span><i style="display:inline-block;width:10px;height:10px;background:#c8a45a;border-radius:2px;margin-right:6px;vertical-align:middle"></i>Vienti yhteensä</span>
+        <span><i style="display:inline-block;width:10px;height:10px;background:#5bb4d8;border-radius:2px;margin-right:6px;vertical-align:middle"></i>EU-vienti</span>
+      </div>
+    </div>
+
+    <div class="section-title">
+      <h2>Kategoriat Q1 / 2026</h2>
+      <span class="meta">vuosimuutos</span>
+    </div>
+    <p class="explain">Tuottajahintojen <strong>vuosimuutos</strong> elintarvikekategorioittain — Q1 / 2026 verrattuna Q1 / 2025. Palkin pituus on suhteutettu suurimpaan muutokseen. Lähde: Tilastokeskus.</p>
+    <div class="cats" id="catBody"></div>
+  </section>
+
+  <div class="footer">© 2026 · Demo-näkymä · Lähteet: Tilastokeskus, Luke, Ruokavirasto, ETL, Open-Meteo</div>
+</main>
+
+<script>
+/* ---------- DATA ---------- */
+const PRICES = [
+  {name:'Vehnä', value:15.60, unit:'€/100 kg', delta:-12.5, trend:[19,18.4,18.1,17.6,17.2,16.9,16.5,16.3,16.0,15.8,15.7,15.6]},
+  {name:'Ruis', value:19.20, unit:'€/100 kg', delta:-11.8, trend:[22.6,22.1,21.7,21.3,21.0,20.6,20.3,20.0,19.7,19.5,19.3,19.2]},
+  {name:'Ohra', value:13.70, unit:'€/100 kg', delta:-12.2, trend:[16.3,16.0,15.7,15.4,15.1,14.8,14.5,14.3,14.1,13.9,13.8,13.7]},
+  {name:'Maito', value:56.10, unit:'€/100 L', delta:7.1, trend:[52.4,52.8,53.2,53.6,54.0,54.4,54.8,55.1,55.4,55.7,55.9,56.1]},
+  {name:'Naudanliha', value:534, unit:'€/100 kg', delta:37.9, trend:[388,402,418,435,450,465,478,492,505,516,525,534]},
+  {name:'Sianliha', value:187.5, unit:'€/100 kg', delta:-3.5, trend:[194,193,192,191,190.5,190,189.5,189,188.6,188.2,187.8,187.5]},
+];
+
+const RSS_SOURCES = [
+  {url:'https://www.maaseuduntulevaisuus.fi/feed/', badge:'MT', tag:'Maatalous FI'},
+  {url:'https://www.efsa.europa.eu/en/press/rss', badge:'EFSA', tag:'Elintarviketurvallisuus'},
+  {url:'https://www.europarl.europa.eu/rss/topic/904/en.xml', badge:'EP', tag:'EU-parlamentti'},
+  {url:'https://www.beuc.eu/rss/news-events/Food', badge:'BEUC', tag:'Kuluttajat'},
+  {url:'https://www.foodsafetynews.com/feed', badge:'FSN', tag:'Toimiala'},
+];
+
+const CITIES = [
+  {name:'Helsinki', lat:60.1699, lon:24.9384},
+  {name:'Tampere', lat:61.4978, lon:23.7610},
+  {name:'Oulu', lat:65.0121, lon:25.4651},
+  {name:'Joensuu', lat:62.6010, lon:29.7636},
+];
+
+const WMO = {
+  0:['Selkeää','☀️'],1:['Enimm. selkeää','🌤️'],2:['Puolipilvistä','⛅'],3:['Pilvistä','☁️'],
+  45:['Sumua','🌫️'],48:['Huurresumua','🌫️'],
+  51:['Heikkoa tihkua','🌦️'],53:['Tihkua','🌦️'],55:['Voimakasta tihkua','🌦️'],
+  56:['Jäätävää tihkua','🌧️'],57:['Jäätävää tihkua','🌧️'],
+  61:['Heikkoa sadetta','🌧️'],63:['Sadetta','🌧️'],65:['Voimakasta sadetta','🌧️'],
+  66:['Jäätävää sadetta','🌧️'],67:['Jäätävää sadetta','🌧️'],
+  71:['Heikkoa lumisadetta','🌨️'],73:['Lumisadetta','🌨️'],75:['Voimakasta lumisadetta','❄️'],
+  77:['Lumijyväsiä','🌨️'],
+  80:['Sadekuuroja','🌦️'],81:['Sadekuuroja','🌧️'],82:['Rajuja kuuroja','⛈️'],
+  85:['Lumikuuroja','🌨️'],86:['Voim. lumikuuroja','❄️'],
+  95:['Ukkosta','⛈️'],96:['Ukkosta ja rakeita','⛈️'],99:['Voim. ukkosta','⛈️'],
+};
+
+const HARVEST = [
+  {name:'Vehnä', value:862},
+  {name:'Ruis', value:84},
+  {name:'Ohra', value:1615},
+  {name:'Kaura', value:1158},
+  {name:'Rypsi', value:225},
+];
+
+const EXPORT_DATA = {
+  years:[2021,2022,2023,2024,2025,2026],
+  total:[1850,2080,2240,2410,2580,2710],
+  eu:  [1190,1330,1420,1530,1640,1735],
+};
+
+const CATEGORIES = [
+  {name:'Maitotuotteet', delta:7.1},
+  {name:'Naudanlihajalosteet', delta:37.9},
+  {name:'Sianlihajalosteet', delta:-3.5},
+  {name:'Viljatuotteet', delta:-12.5},
+  {name:'Juomat', delta:3.2},
+];
+
+/* ---------- HELPERS ---------- */
+const fmtNum = n => n.toLocaleString('fi-FI',{maximumFractionDigits:n>=100?0:2});
+const fmtDelta = d => (d>0?'+':'') + d.toFixed(1).replace('.',',') + ' %';
+
+function relTime(date){
+  const s = (Date.now() - date.getTime())/1000;
+  if (s < 60) return 'juuri nyt';
+  if (s < 3600) return Math.floor(s/60)+' min sitten';
+  if (s < 86400) return Math.floor(s/3600)+' t sitten';
+  const d = Math.floor(s/86400);
+  if (d < 7) return d+' pv sitten';
+  return date.toLocaleDateString('fi-FI');
+}
+
+/* ---------- PRICE CARDS ---------- */
+function renderPrices(){
+  const el = document.getElementById('priceScroller');
+  el.innerHTML = PRICES.map(p => {
+    const dir = p.delta >= 0 ? 'up' : 'down';
+    const arrow = p.delta >= 0 ? '▲' : '▼';
+    return `
+      <div class="pcard">
+        <div class="name">${p.name}</div>
+        <div class="price">${fmtNum(p.value)}<span class="unit">${p.unit}</span></div>
+        <div class="delta ${dir}">${arrow} ${fmtDelta(p.delta)}</div>
+        ${sparkline(p.trend, dir)}
+      </div>
+    `;
+  }).join('');
+}
+
+function sparkline(data, dir){
+  const w=240, h=46, pad=3;
+  const min = Math.min(...data), max=Math.max(...data);
+  const range = max-min || 1;
+  const stepX = (w-pad*2)/(data.length-1);
+  const pts = data.map((v,i)=>[pad+i*stepX, h-pad-((v-min)/range)*(h-pad*2)]);
+  const d = pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ');
+  const area = d + ` L ${pts[pts.length-1][0]} ${h} L ${pts[0][0]} ${h} Z`;
+  const color = dir==='up' ? '#3fb950' : '#f85149';
+  const fill = dir==='up' ? 'rgba(63,185,80,.18)' : 'rgba(248,81,73,.18)';
+  return `<svg class="spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
+    <path d="${area}" fill="${fill}"/>
+    <path d="${d}" fill="none" stroke="${color}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>`;
+}
+
+/* ---------- CANVAS UTILS ---------- */
+function setupCanvas(canvas){
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr,dpr);
+  return {ctx, w:rect.width, h:rect.height};
+}
+
+/* ---------- GRAIN LINE CHART ---------- */
+function drawGrainChart(){
+  const canvas = document.getElementById('grainChart');
+  if (!canvas) return;
+  const {ctx,w,h} = setupCanvas(canvas);
+  ctx.clearRect(0,0,w,h);
+  const series = [
+    {name:'Vehnä', color:'#c8a45a', data: PRICES[0].trend},
+    {name:'Ruis', color:'#5bb4d8', data: PRICES[1].trend},
+    {name:'Ohra', color:'#e8a157', data: PRICES[2].trend},
+  ];
+  const pl=36, pr=12, pt=10, pb=26;
+  const cw=w-pl-pr, ch=h-pt-pb;
+  let mn=Infinity, mx=-Infinity;
+  series.forEach(s=>s.data.forEach(v=>{if(v<mn)mn=v;if(v>mx)mx=v}));
+  const pad=(mx-mn)*0.1; mn-=pad; mx+=pad;
+  // grid
+  ctx.strokeStyle='#262d3a'; ctx.lineWidth=1; ctx.font='10px DM Sans'; ctx.fillStyle='#8b96a8';
+  for(let i=0;i<=4;i++){
+    const y=pt+ch*i/4;
+    ctx.beginPath();ctx.moveTo(pl,y);ctx.lineTo(w-pr,y);ctx.stroke();
+    const val=mx-(mx-mn)*i/4;
+    ctx.textAlign='right';ctx.fillText(val.toFixed(0), pl-6, y+3);
+  }
+  const months=['T','H','M','H','T','K','H','E','S','L','M','J'];
+  const n = series[0].data.length;
+  series.forEach(s=>{
+    ctx.beginPath();
+    s.data.forEach((v,i)=>{
+      const x=pl+cw*i/(n-1);
+      const y=pt+ch*(1-(v-mn)/(mx-mn));
+      i?ctx.lineTo(x,y):ctx.moveTo(x,y);
+    });
+    ctx.strokeStyle=s.color; ctx.lineWidth=2.2; ctx.lineJoin='round'; ctx.stroke();
+  });
+  ctx.fillStyle='#8b96a8'; ctx.textAlign='center';
+  for(let i=0;i<n;i++){
+    if (i%2) continue;
+    const x=pl+cw*i/(n-1);
+    ctx.fillText(months[i], x, h-8);
+  }
+  // legend
+  ctx.textAlign='left'; let lx=pl;
+  series.forEach(s=>{
+    ctx.fillStyle=s.color; ctx.fillRect(lx, pt-6, 8,8);
+    ctx.fillStyle='#e6edf3'; ctx.fillText(s.name, lx+12, pt+1);
+    lx += ctx.measureText(s.name).width + 32;
+  });
+}
+
+/* ---------- HARVEST BAR CHART ---------- */
+function drawHarvestChart(){
+  const canvas = document.getElementById('harvestChart');
+  if (!canvas) return;
+  const {ctx,w,h} = setupCanvas(canvas);
+  ctx.clearRect(0,0,w,h);
+  const pl=80, pr=40, pt=8, pb=8;
+  const cw=w-pl-pr, ch=h-pt-pb;
+  const max = Math.max(...HARVEST.map(d=>d.value));
+  const bh = ch/HARVEST.length * 0.62;
+  const gap = ch/HARVEST.length;
+  ctx.font='12px DM Sans';
+  HARVEST.forEach((d,i)=>{
+    const y = pt + i*gap + (gap-bh)/2;
+    const bw = (d.value/max) * cw;
+    // bg
+    ctx.fillStyle='#262d3a'; ctx.fillRect(pl,y,cw,bh);
+    // bar gradient
+    const g = ctx.createLinearGradient(pl,0,pl+bw,0);
+    g.addColorStop(0,'#8a7038'); g.addColorStop(1,'#c8a45a');
+    ctx.fillStyle=g; ctx.fillRect(pl,y,bw,bh);
+    // label
+    ctx.fillStyle='#e6edf3'; ctx.textAlign='right'; ctx.textBaseline='middle';
+    ctx.fillText(d.name, pl-10, y+bh/2);
+    // value
+    ctx.fillStyle='#c8a45a'; ctx.textAlign='left';
+    ctx.fillText(fmtNum(d.value), pl+bw+6, y+bh/2);
+  });
+}
+
+/* ---------- EXPORT LINE CHART ---------- */
+function drawExportChart(){
+  const canvas = document.getElementById('exportChart');
+  if (!canvas) return;
+  const {ctx,w,h} = setupCanvas(canvas);
+  ctx.clearRect(0,0,w,h);
+  const pl=44, pr=14, pt=12, pb=26;
+  const cw=w-pl-pr, ch=h-pt-pb;
+  const all = [...EXPORT_DATA.total, ...EXPORT_DATA.eu];
+  let mn=Math.min(...all)*0.9, mx=Math.max(...all)*1.05;
+  ctx.strokeStyle='#262d3a'; ctx.font='10px DM Sans'; ctx.fillStyle='#8b96a8';
+  for(let i=0;i<=4;i++){
+    const y=pt+ch*i/4;
+    ctx.beginPath();ctx.moveTo(pl,y);ctx.lineTo(w-pr,y);ctx.stroke();
+    const v=mx-(mx-mn)*i/4;
+    ctx.textAlign='right'; ctx.fillText(v.toFixed(0), pl-6, y+3);
+  }
+  const n = EXPORT_DATA.years.length;
+  function drawLine(data, color){
+    // area
+    ctx.beginPath();
+    data.forEach((v,i)=>{
+      const x=pl+cw*i/(n-1);
+      const y=pt+ch*(1-(v-mn)/(mx-mn));
+      i?ctx.lineTo(x,y):ctx.moveTo(x,y);
+    });
+    const lastX = pl+cw;
+    ctx.lineTo(lastX, pt+ch);
+    ctx.lineTo(pl, pt+ch);
+    ctx.closePath();
+    const g = ctx.createLinearGradient(0,pt,0,pt+ch);
+    g.addColorStop(0, color+'55'); g.addColorStop(1, color+'00');
+    ctx.fillStyle = g; ctx.fill();
+    // line
+    ctx.beginPath();
+    data.forEach((v,i)=>{
+      const x=pl+cw*i/(n-1);
+      const y=pt+ch*(1-(v-mn)/(mx-mn));
+      i?ctx.lineTo(x,y):ctx.moveTo(x,y);
+    });
+    ctx.strokeStyle=color; ctx.lineWidth=2.4; ctx.lineJoin='round'; ctx.stroke();
+    // dots
+    data.forEach((v,i)=>{
+      const x=pl+cw*i/(n-1);
+      const y=pt+ch*(1-(v-mn)/(mx-mn));
+      ctx.beginPath();ctx.arc(x,y,3,0,Math.PI*2);ctx.fillStyle=color;ctx.fill();
+    });
+  }
+  drawLine(EXPORT_DATA.total, '#c8a45a');
+  drawLine(EXPORT_DATA.eu, '#5bb4d8');
+  ctx.fillStyle='#8b96a8'; ctx.textAlign='center';
+  EXPORT_DATA.years.forEach((y,i)=>{
+    const x=pl+cw*i/(n-1);
+    ctx.fillText(y + (i===n-1?'e':''), x, h-8);
+  });
+}
+
+/* ---------- NEWS ---------- */
+const loadedTabs = new Set(['hinnat']);
+
+async function fetchFeed(src){
+  // 1) rss2json (ilman count-parametria — count vaatii API-avaimen)
+  try {
+    const r = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(src.url)}`);
+    if (r.ok) {
+      const d = await r.json();
+      if (d.status === 'ok' && d.items && d.items.length) {
+        return d.items.slice(0,3).map(it => ({
+          title: it.title, link: it.link, date: new Date(it.pubDate), src
+        }));
+      }
+    }
+  } catch(e){}
+  // 2) Varalla: allorigins-proxy + XML-jäsennys selaimessa
+  try {
+    const r = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(src.url)}`);
+    if (!r.ok) return [];
+    const txt = await r.text();
+    if (!/<rss|<feed|<rdf/i.test(txt)) return []; // ei ole RSS
+    const doc = new DOMParser().parseFromString(txt, 'text/xml');
+    const items = [...doc.querySelectorAll('item, entry')].slice(0,3);
+    return items.map(n => {
+      const get = sel => n.querySelector(sel)?.textContent?.trim() || '';
+      const link = get('link') || n.querySelector('link')?.getAttribute('href') || '';
+      const pub = get('pubDate') || get('published') || get('updated');
+      return { title: get('title'), link, date: pub ? new Date(pub) : new Date(), src };
+    }).filter(x => x.title);
+  } catch(e){ return []; }
+}
+
+async function loadNews(){
+  const body = document.getElementById('newsBody');
+  body.innerHTML = `<div class="loading"><div class="spinner"></div>Ladataan uutisia…</div>`;
+  const results = await Promise.all(RSS_SOURCES.map(fetchFeed));
+  const items = results.flat().filter(x => x.title).sort((a,b) => b.date - a.date);
+  const failed = RSS_SOURCES.filter((_,i) => !results[i].length).map(s => s.badge);
+  if (!items.length){
+    body.innerHTML = `<div class="errmsg">Uutislähteet eivät vastanneet. Tarkista yhteys tai yritä myöhemmin.</div>`;
+    return;
+  }
+  const warn = failed.length
+    ? `<div class="errmsg" style="margin-bottom:10px">Osa lähteistä ei vastannut: ${failed.join(', ')}.</div>` : '';
+  body.innerHTML = warn + `<div class="news">${items.map(it=>`
+    <a class="news-item" href="${it.link}" target="_blank" rel="noopener">
+      <div class="news-top">
+        <span class="badge b-${it.src.badge}">${it.src.badge}</span>
+        <span class="pill">${it.src.tag}</span>
+        <span class="time">${relTime(it.date)}</span>
+      </div>
+      <h4>${escapeHtml(it.title)}</h4>
+    </a>
+  `).join('')}</div>`;
+}
+function escapeHtml(s){return s.replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+
+/* ---------- WEATHER ---------- */
+async function loadWeather(){
+  const body = document.getElementById('weatherBody');
+  body.innerHTML = `<div class="loading"><div class="spinner"></div>Ladataan säätietoja…</div>`;
+  try {
+    const results = await Promise.all(CITIES.map(async c => {
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${c.lat}&longitude=${c.lon}&current=temperature_2m,wind_speed_10m,relative_humidity_2m,weather_code&timezone=Europe%2FHelsinki`;
+      const r = await fetch(url);
+      const d = await r.json();
+      return {city:c, w:d.current};
+    }));
+    body.innerHTML = `<div class="weather">${results.map(({city,w})=>{
+      const code = w.weather_code;
+      const [desc, icon] = WMO[code] || ['—','🌡️'];
+      return `<div class="wcard">
+        <div class="city">${city.name}</div>
+        <div class="icon">${icon}</div>
+        <div class="temp">${Math.round(w.temperature_2m)}°C</div>
+        <div class="desc">${desc}</div>
+        <div class="meta-row"><span>💨 ${Math.round(w.wind_speed_10m)} m/s</span><span>💧 ${w.relative_humidity_2m} %</span></div>
+      </div>`;
+    }).join('')}</div>`;
+    setTimeout(drawHarvestChart, 50);
+  } catch(e){
+    body.innerHTML = `<div class="errmsg">Säätietojen lataus epäonnistui.</div>`;
+  }
+}
+
+/* ---------- TRENDS ---------- */
+function renderCats(){
+  const body = document.getElementById('catBody');
+  const max = Math.max(...CATEGORIES.map(c=>Math.abs(c.delta)));
+  body.innerHTML = CATEGORIES.map(c=>{
+    const dir = c.delta>=0?'up':'down';
+    const pct = Math.abs(c.delta)/max*100;
+    return `<div class="cat">
+      <div class="cat-top">
+        <span class="cat-name">${c.name}</span>
+        <span class="cat-val ${dir}">${fmtDelta(c.delta)}</span>
+      </div>
+      <div class="bar"><i class="${dir}" style="width:${pct}%"></i></div>
+    </div>`;
+  }).join('');
+}
+
+/* ---------- TABS ---------- */
+function activateTab(name){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active', t.dataset.tab===name));
+  document.querySelectorAll('.pane').forEach(p=>p.classList.toggle('active', p.id==='pane-'+name));
+  if (!loadedTabs.has(name)) {
+    loadedTabs.add(name);
+    loadTab(name);
+  } else {
+    // redraw charts on switch (sizing)
+    requestAnimationFrame(()=>{
+      if (name==='hinnat') drawGrainChart();
+      if (name==='saa') drawHarvestChart();
+      if (name==='trendit') drawExportChart();
+    });
+  }
+}
+
+function loadTab(name){
+  if (name==='hinnat'){ renderPrices(); requestAnimationFrame(drawGrainChart); }
+  else if (name==='uutiset'){ loadNews(); }
+  else if (name==='saa'){ loadWeather(); }
+  else if (name==='trendit'){ renderCats(); requestAnimationFrame(drawExportChart); }
+}
+
+document.getElementById('tabs').addEventListener('click', e=>{
+  const b = e.target.closest('.tab'); if(!b) return;
+  activateTab(b.dataset.tab);
+});
+
+document.getElementById('refreshBtn').addEventListener('click', ()=>{
+  const btn = document.getElementById('refreshBtn');
+  btn.classList.add('spin');
+  const active = document.querySelector('.tab.active').dataset.tab;
+  // re-fetch / re-render active tab
+  if (active==='uutiset') loadNews();
+  else if (active==='saa') loadWeather();
+  else loadTab(active);
+  setTimeout(()=>btn.classList.remove('spin'), 900);
+});
+
+window.addEventListener('resize', ()=>{
+  const active = document.querySelector('.tab.active').dataset.tab;
+  if (active==='hinnat') drawGrainChart();
+  if (active==='saa') drawHarvestChart();
+  if (active==='trendit') drawExportChart();
+});
+
+// init
+loadTab('hinnat');
+</script>
+</body>
+</html>
 .news-item{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:10px;display:flex;gap:12px;text-decoration:none;color:inherit;transition:border-color .2s,transform .15s}
 .news-item:active{transform:scale(.99);border-color:var(--accent)}
 .news-source-badge{flex-shrink:0;width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:700;text-align:center;line-height:1.2}
